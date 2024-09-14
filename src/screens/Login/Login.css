@@ -1,0 +1,93 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+#loginContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  background-color: pink;
+}
+#loginContent {
+  width: 1440px;
+  display: flex;
+  justify-content: center;
+}
+#formLogin {
+  width: 40%;
+  border: 1px solid gray;
+  border-radius: 10px;
+  height: 520px;
+  margin: 80px 0 100px 0;
+  background-color: rgb(227, 180, 189);
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+}
+#formLogin > img {
+  margin: 50px 0 0px 0;
+  width: auto;
+  height: 70px;
+}
+#formLogin > p {
+  color: gray;
+  font-weight: 600;
+  width: 80%;
+  margin: 20px 0 10px 0;
+}
+
+#formLogin > input {
+  height: 55px;
+  padding-left: 5%;
+  color: white;
+  font-weight: 500;
+  width: 80%;
+  border-radius: 4px;
+  background-color: rgb(7, 10, 28);
+  border: 1px solid grey;
+}
+#formLogin > button {
+  width: 100%;
+  height: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: all 0.5s ease;
+  justify-content: center;
+  background-color: rgb(7, 10, 28);
+  border-radius: 8px;
+}
+
+#formLogin .loadingButton:hover {
+  background-color: rgb(211, 123, 137);
+}
+#formLogin button {
+  width: 85%;
+  margin-top: 35px;
+  text-decoration: none;
+  height: 55px;
+}
+#formLogin button:hover {
+  /* background-color: black; */
+  cursor: pointer;
+  border: 1px solid pink;
+}
+#formLogin > button > img {
+  width: 20px;
+  height: 20px;
+}
+#formLogin > button > p {
+  color: rgb(255, 255, 255);
+  margin-left: 2%;
+
+  font-size: 16px;
+}
+
+.loading-text {
+  margin-left: 5px;
+}
+.dangnhap {
+  margin: auto 0;
+}
+
