@@ -1,0 +1,66 @@
+th {
+  /* padding: 15px; */
+}
+td {
+  /* align-items: center;
+  text-align: center; */
+}
+a {
+  color: var(--hongdam);
+}
+.tieude {
+  background-color: var(--pick);
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-container td {
+    /* Đảm bảo tất cả các ô trong bảng có cùng kích thước */
+    max-width: 200px; /* Thay đổi kích thước tối đa theo ý muốn */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+/* hover cho mỗi hàng */
+.table-container tbody tr:hover {
+  background-color: rgba(255, 192, 203, 0.256);
+  cursor: pointer;
+}
+
+td button {
+  background-color: transparent;
+  font-size: 30px;
+  margin-right: 10px;
+  border: none;
+}
+
+/* nut edit */
+.bx-edit {
+  color: var(--xanhlanhat);
+}
+
+.bx-edit:hover {
+  color: var(--xanhla);
+}
+
+/* nut xoa */
+.bx-trash {
+  color: var(--red);
+}
+
+.bx-trash:hover {
+  color: var(--red2);
+}
+
+
