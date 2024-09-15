@@ -1,0 +1,17 @@
+form > div{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px; /* Thêm khoảng cách giữa các phần tử nếu cần */
+}
+
+form > div > label {
+  margin-bottom: 10px; /* Khoảng cách giữa label và input */
+  font-weight: bold; /* Làm chữ label đậm hơn nếu cần */
+}
+
+form > div > input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 80%;
+}
