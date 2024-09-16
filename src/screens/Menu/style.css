@@ -30,6 +30,7 @@ li {
   --light-orange: #ffe0d3;
   --pick: #ffc2cc;
   --hongdam: #ea6a80;
+  --hongnhat: #ffc0cb41;
   --xanhla: #004600;
   --xanhlanhat: #008000;
 }
@@ -63,9 +64,7 @@ body {
   overflow-x: hidden;
   /* scrollbar-width: none; */
 }
-#sidebar::--webkit-scrollbar {
-  display: none;
-}
+
 #sidebar.hide {
   width: 60px;
 }
@@ -155,6 +154,10 @@ body {
   min-width: calc(60px - ((4px + 6px) * 2));
   display: flex;
   justify-content: center;
+}
+
+option:hover{
+  background-color: var(--hongnhat);
 }
 
 

@@ -34,7 +34,7 @@ a {
 
 /* hover cho mỗi hàng */
 .table-container tbody tr:hover {
-  background-color: rgba(255, 192, 203, 0.256);
+  background-color: var(--hongnhat);
   cursor: pointer;
 }
 
