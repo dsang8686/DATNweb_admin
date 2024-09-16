@@ -12,6 +12,10 @@ const Product = () => {
       soLuong: 18,
       thongTin: "Đây là mô tả của sản phẩm Alpha, với các đặc điểm nổi bật. ska",
       danhMuc: "Danh mục A",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 2,
@@ -20,6 +24,10 @@ const Product = () => {
       soLuong: 28,
       thongTin: "Mô tả chi tiết của sản phẩm Beta, với tính năng tiên tiến.",
       danhMuc: "Danh mục B",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 3,
@@ -28,6 +36,10 @@ const Product = () => {
       soLuong: 22,
       thongTin: "Danh mục về sản phẩm Gamma, bao gồm các thông số kỹ thuật.",
       danhMuc: "Danh mục C",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 4,
@@ -37,6 +49,10 @@ const Product = () => {
       thongTin:
         "Sản phẩm Delta nổi bật với chất lượng vượt trội và thiết kế tinh tế.",
       danhMuc: "Danh mục A",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 5,
@@ -46,6 +62,10 @@ const Product = () => {
       thongTin:
         "Epsilon là sản phẩm mới với công nghệ tiên tiến và hiệu suất cao.",
       danhMuc: "Danh mục B",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 6,
@@ -55,6 +75,10 @@ const Product = () => {
       thongTin:
         "Zeta mang lại trải nghiệm tuyệt vời với chất lượng cao và giá cả hợp lý.",
       danhMuc: "Danh mục C",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 7,
@@ -63,6 +87,10 @@ const Product = () => {
       soLuong: 11,
       thongTin: "Sản phẩm Eta cung cấp giải pháp tối ưu cho nhu cầu của bạn.",
       danhMuc: "Danh mục A",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 8,
@@ -72,6 +100,10 @@ const Product = () => {
       thongTin:
         "Theta là lựa chọn lý tưởng với hiệu suất tốt và tính năng nổi bật.",
       danhMuc: "Danh mục B",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 9,
@@ -81,6 +113,10 @@ const Product = () => {
       thongTin:
         "Mô tả Iota cung cấp thông tin chi tiết về sản phẩm và ứng dụng của nó.",
       danhMuc: "Danh mục C",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
     {
       id: 10,
@@ -90,6 +126,10 @@ const Product = () => {
       thongTin:
         "Kappa là sản phẩm đáng chú ý với thiết kế hiện đại và công nghệ tiên tiến.",
       danhMuc: "Danh mục A",
+      images: [
+        "https://example.com/image5.jpg",
+        "https://example.com/image6.jpg",
+      ],
     },
   ];
 
