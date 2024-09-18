@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Menu from "../Menu/Menu";
 import "./Insert.css";
+import Swal from "sweetalert2";
 
 const Insert = () => {
   const [tensanpham, setTensanpham] = useState("");
@@ -24,6 +25,49 @@ const Insert = () => {
     setImages(files);
   };
 
+  const reset = async () => {
+    setTensanpham("");
+    setDonGia("");
+    setSoluong("");
+    setThongtin("");
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Kiểm tra các trường thông tin không được để trống
+      if (!tensanpham || !donGia || !soluong || !thongtin) {
+        // Hiển thị cảnh báo nếu có trường thông tin nào đó không hợp lệ
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Vui lòng điền đầy đủ thông tin!",
+        });
+        return; // Dừng hàm handleSubmit nếu có trường thông tin không hợp lệ
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Thành công",
+          text: "Thêm sản phẩm thành công!",
+        });
+        // reset form
+        setTensanpham("");
+        setDonGia("");
+        setSoluong("");
+        setThongtin("");
+
+        // quay về trang danh sách
+        window.location.href = "/product";
+      }
+    } catch (error) {
+      console.log("....Loi:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Thêm sản phẩm không thành công!",
+      });
+    }
+  };
+
   return (
     <div className="home-container">
       <Menu />
@@ -33,15 +77,23 @@ const Insert = () => {
         <form>
           <div>
             <label>ID sản phẩm:</label>
+
             <input type="text" value={12} readOnly className="idsanpham" />
           </div>
           <div>
             <label>Tên sản phẩm:</label>
-            <input type="text" placeholder="Tên sản phẩm" />
+            <input
+              type="text"
+              placeholder="Tên sản phẩm"
+              value={tensanpham}
+              onChange={(e) => setTensanpham(e.target.value)}
+            />
           </div>
           <div>
             <label>Đơn giá:</label>
             <input
+              value={donGia}
+              onChange={(e) => setDonGia(e.target.value)}
               type="number"
               min="10000"
               max="2000000"
@@ -56,16 +108,23 @@ const Insert = () => {
           <div>
             <label>Số lượng:</label>
             <input
+              value={soluong}
               type="number"
               min="1"
               max="99"
               placeholder="số lượng sản phẩn"
+              onChange={(e) => setSoluong(e.target.value)}
             />
           </div>
 
           <div>
             <label>Thông tin sản phẩm:</label>
-            <textarea type="text" placeholder="Chi tiết sản phẩm" />
+            <textarea
+              value={thongtin}
+              type="text"
+              placeholder="Chi tiết sản phẩm"
+              onChange={(e) => setThongtin(e.target.value)}
+            />
           </div>
 
           <div>
@@ -93,10 +152,11 @@ const Insert = () => {
             </div>
           </div>
 
-          <button type="submit" className="them">Thêm</button>
+          <button type="button" className="them" onClick={handleSubmit}>
+            Thêm
+          </button>
 
-          <input type="reset" value="Reset" className="them"/>
-
+          <input type="reset" value="Reset" className="them"  onClick={reset}/>
         </form>
       </div>
     </div>
