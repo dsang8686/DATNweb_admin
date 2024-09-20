@@ -1,7 +1,9 @@
 import React from "react";
 import "./Login.css";
+import DefaultLayout from "../Layout/DefaultLayout";
+
 const handleLogin = async () => {
-  window.location.href = "/home";
+  window.location.href = "/";
 }
 
 
