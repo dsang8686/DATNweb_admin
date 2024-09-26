@@ -18,9 +18,11 @@ function App() {
       <Router>
         <Routes>
           {/* authen */}
+          {/* <Route path="/" element={<Login />} /> */}
           <Route path="/login" element={<Login />} />
 
           <Route path="*" element={<DefaultLayout />} />
+
         </Routes>
       </Router>
     </div>

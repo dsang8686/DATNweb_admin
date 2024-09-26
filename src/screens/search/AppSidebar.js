@@ -21,8 +21,9 @@ import {
   cilCloudDownload,
   cilLayers,
 } from "@coreui/icons";
-
 import CIcon from "@coreui/icons-react";
+import { sygnet } from "@coreui/icons";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@coreui/coreui/dist/css/coreui.min.css";
 
@@ -58,60 +59,32 @@ const AppSidebar = () => {
           <Link to={"/"}>
             <CImage rounded src={logo} width={150} />
           </Link>
+
+          <CIcon
+            customClassName="sidebar-brand-narrow"
+            icon={cilSpeedometer}
+            height={32}
+          />
+
+          {/* <CIcon customClassName="sidebar-brand-narrow" icon={cilSpeedometer} height={32} /> */}
         </CSidebarBrand>
 
         <CCloseButton
           className="d-lg-none"
-          dark
+          light
           onClick={() => dispatch({ type: "set", sidebarShow: false })}
         />
       </CSidebarHeader>
 
-      {/* <CSidebarNav as={SimpleBar}>
-        <CNavTitle>Nav Title</CNavTitle>
-        <CNavItem href="#">
-          <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Nav item
-        </CNavItem>
-        <CNavItem href="#">
-          <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> With badge{" "}
-          <CBadge color="primary ms-auto">NEW</CBadge>
-        </CNavItem>
-        <CNavGroup
-          toggler={
-            <>
-              <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Nav dropdown
-            </>
-          }
-        >
-          <CNavItem href="#">
-            <span className="nav-icon">
-              <span className="nav-icon-bullet"></span>
-            </span>{" "}
-            Nav dropdown item
-          </CNavItem>
-          <CNavItem href="#">
-            <span className="nav-icon">
-              <span className="nav-icon-bullet"></span>
-            </span>{" "}
-            Nav dropdown item
-          </CNavItem>
-        </CNavGroup>
-        <CNavItem href="https://coreui.io">
-          <CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download
-          CoreUI
-        </CNavItem>
-        <CNavItem href="https://coreui.io/pro/">
-          <CIcon customClassName="nav-icon" icon={cilLayers} /> Try CoreUI PRO
-        </CNavItem>
-      </CSidebarNav> */}
 
       <AppSidebarNav items={_nav} />
 
-      
       <CSidebarHeader className="border-top">
         <CSidebarToggler
-          onClick={() =>
-            dispatch({ type: "set", sidebarUnfoldable: !unfoldable })
+        style={{ height: '40px', width: '40px', marginLeft: 'auto' }}
+          onClick={
+            // () => dispatch({ type: "set", sidebarUnfoldable: !unfoldable })
+            () => dispatch({ type: "set", sidebarShow: !sidebarShow })
           }
         />
       </CSidebarHeader>

@@ -72,13 +72,13 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'Cấu hình sản phẩm',
+        name: 'Tất cả sản phẩm',
         to: '/product',
       },
       {
         component: CNavItem,
-        name: 'Thương hiệu sản phẩm',
-        to: '/products/add',
+        name: 'Thêm sản phẩm',
+        to: '/product/add',
       },
       {
         component: CNavItem,
