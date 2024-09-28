@@ -1,7 +1,7 @@
 import React from "react";
-import Menu from "../Menu/Menu";
-import "./Product.css";
+
 import { Link } from "react-router-dom";
+
 
 const Product = () => {
   const data = [
@@ -140,7 +140,7 @@ const Product = () => {
 
   return (
     <div className="home-container">
-      <Menu />
+      {/* <Menu /> */}
       <div className="content">
         <h3>Sản phẩm</h3>
 
