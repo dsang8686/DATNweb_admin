@@ -19,6 +19,7 @@ const DefaultLayout = () => {
     <div
       style={{
         fontSize: 14,
+        display: "flex",
       }}
     >
       <AppSidebar />

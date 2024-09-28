@@ -11,7 +11,7 @@ import AddInfo from "../view/info/AddInfo.js";
 
 const AppContent = () => {
   return (
-    <CContainer style={{ paddingInlineEnd: '10rem' }}>     {/* thay doi padding =>  className="px-5" */}
+    <CContainer style={{ paddingInlineStart: '10rem' }}>     {/* thay doi padding =>  className="px-5" */}
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
           <Route path="/" element={<Navigate to="home" replace />} />
