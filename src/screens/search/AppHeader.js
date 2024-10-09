@@ -25,7 +25,6 @@ import {
   cilSun,
 } from "@coreui/icons";
 
-
 const AppHeader = () => {
   const headerRef = useRef();
   const { colorMode, setColorMode } = useColorModes(
@@ -62,11 +61,7 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
-        <CHeaderNav className="ms-auto">
-
-        
-
-        </CHeaderNav>
+        <CHeaderNav className="ms-auto"></CHeaderNav>
         <CHeaderNav>
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
@@ -112,9 +107,6 @@ const AppHeader = () => {
               </CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
-
-         
-          
         </CHeaderNav>
       </CContainer>
     </CHeader>
