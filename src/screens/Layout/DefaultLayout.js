@@ -2,7 +2,6 @@ import React from "react";
 import AppSidebar from "../search/AppSidebar";
 import AppHeader from "../search/AppHeader";
 
-import Product from "../view/Products/Product";
 import "./../Layout/style.css";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -25,9 +24,7 @@ const DefaultLayout = () => {
       <AppSidebar /> {/* Sidebar */}
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader className="header" /> {/* Header */}
-        <div className="body flex-grow-1">
-          {" "}
-          {/* Content */}
+        <div className="">
           <AppContent />
         </div>
       </div>

@@ -77,49 +77,15 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: 'Danh mục sản phẩm',
+        to: '/category',
+      },
+      {
+        component: CNavItem,
         name: 'Thêm sản phẩm',
         to: '/product/add',
       },
-      {
-        component: CNavItem,
-        name: 'Danh mục sản phẩm',
-        to: '/product/category',
-      },
-      {
-        component: CNavItem,
-        name: 'Thuộc tính sản phẩm',
-        to: '/product/properties',
-      },
-      {
-        component: CNavItem,
-        name: 'Trạng thái sản phẩm',
-        to: '/product/status',
-      },
-      {
-        component: CNavItem,
-        name: 'Sản phẩm flash sale',
-        to: '/product/product-flash-sale',
-      },
-      {
-        component: CNavItem,
-        name: 'Sản phẩm hot',
-        to: '/product/product-hot',
-      },
-      {
-        component: CNavItem,
-        name: 'Banner sản phẩm',
-        to: '/product/banner',
-      },
-      {
-        component: CNavItem,
-        name: 'Thêm mới sản phẩm',
-        to: '/product/add',
-      },
-      {
-        component: CNavItem,
-        name: 'Quản lý sản phẩm',
-        to: '/product',
-      },
+     
     ],
   },
 
