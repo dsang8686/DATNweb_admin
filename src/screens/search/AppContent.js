@@ -6,9 +6,13 @@ import Home from "../view/Home/Home.js";
 import Info from "../view/info/Info.js";
 import AddInfo from "../view/info/AddInfo.js";
 import Category from "../view/Category/Category.js";
-import CategoryDetail from "../view/Category/CategoryDetail.js";
+import Product from "../view/Product/Product.js";
 import AddCategory from "../view/Category/AddCategory.js";
 import categoriesData from "../../Data.js";
+import ProductDetail from "../view/Product/ProductDetail.js";
+import AddProduct from "../view/Product/AddProduct.js";
+import AllProduct from "../view/Product/AllProduct.js";
+import AddProductNew from "../view/Product/AddProductNew.js";
 
 const AppContent = () => {
   const [categories, setCategories] = useState([]);
@@ -42,15 +46,49 @@ const AppContent = () => {
     });
   };
 
+  const handleDeleteProduct = (categoryId, productId) => {
+    setCategories((prevCategories) => {
+      return prevCategories.map(category => {
+        if (category.id === categoryId) {
+          return {
+            ...category,
+            products: category.products.filter(product => product.id !== productId)
+          };
+        }
+        return category;
+      });
+    });
+  };
+
+  const addProduct = (categoryId, newProduct) => {
+    setCategories((prevCategories) => {
+      return prevCategories.map((category) => {
+        if (category.id === parseInt(categoryId)) {
+          return {
+            ...category,
+            products: [...category.products, newProduct],
+          };
+        }
+        return category;
+      });
+    });
+  };
+  
+
   return (
-    <CContainer style={{ paddingInlineStart: "10rem" }}>
+    <CContainer>
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
           <Route path="/" element={<Navigate to="home" replace />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/category/:id" element={<CategoryDetail categories={categories} />} />
           <Route path="/category" element={<Category categories={categories} onAddCategory={addCategory} onDeleteCategory={deleteCategory} />} />
           <Route path="/category/add" element={<AddCategory onAddCategory={addCategory} />} />
+          <Route path="/category/:id/products" element={<Product categories={categories} onDeleteProduct={handleDeleteProduct} />} />
+          <Route path="/category/:id/addproduct" element={<AddProduct categories={categories} onAddProduct={addProduct} />} />
+          <Route path="/allproducts" element={<AllProduct categories={categories} />} />
+
+          <Route path="/addproduct-new" element={<AddProductNew categories={categories} onAddProduct={addProduct} />} />
+          {/* <Route path="/productdetail/:id" element={<ProductDetail/>} /> */}
           <Route path="/info" element={<Info />} />
           <Route path="/addInfo" element={<AddInfo />} />
         </Routes>

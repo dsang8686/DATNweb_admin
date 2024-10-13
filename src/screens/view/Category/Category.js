@@ -1,75 +1,60 @@
-import React from "react";
-import {
-  CCard,
-  CCardBody,
-  CCardImage,
-  CCardTitle,
-  CCardText,
-  CRow,
-  CCol,
-  CButton,
-} from "@coreui/react";
+import React, { useState } from "react";
+import { CRow, CCol, CButton } from "@coreui/react";
 import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "@coreui/coreui/dist/css/coreui.min.css";
+import "./Category.css";
+import DeleteModal from "../../../Component/DeleteModal";
+import CustomCard from "../../../Component/CustomCard"; // Sử dụng CustomCard
 
-const Category = ({ categories, onAddCategory, onDeleteCategory }) => {
-  const handleDelete = (id) => {
-    // Gọi hàm onDeleteCategory được truyền từ component cha
-    if (window.confirm("Are you sure you want to delete this category?")) {
-      onDeleteCategory(id);
+const Category = ({ categories, onDeleteCategory }) => {
+  const [visible, setVisible] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
+  const handleDeleteClick = (id) => {
+    setSelectedCategoryId(id); // Lưu ID của danh mục cần xóa
+    setVisible(true); // Hiển thị modal
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedCategoryId !== null) {
+      onDeleteCategory(selectedCategoryId); // Xóa danh mục
+      setVisible(false); // Đóng modal sau khi xóa
     }
   };
 
   return (
-    <div className="container mt-3">
-      <h2 className="mb-4">Categories</h2>
-      <CButton color="primary" className="mb-3">
-        <Link
-          to="/category/add"
-          style={{ color: "white", textDecoration: "none" }}
-        >
-          Add Category
-        </Link>
-      </CButton>
+    <div className="container">
+      <CCol className="d-flex justify-content-between my-3">
+        <h4 className="mb-4">DANH SÁCH DANH MỤC</h4>
+
+        <CButton color="primary" className="mb-3">
+          <Link
+            to="/category/add"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Thêm danh mục
+          </Link>
+        </CButton>
+      </CCol>
+
       <CRow>
         {categories.map((category) => (
-          <CCol md={4} key={category.id} className="mb-4">
-            <CCard>
-              <Link
-                to={`/category/${category.id}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <CCardImage
-                  orientation="top"
-                  src={category.image}
-                  alt={category.name}
-                />
-              </Link>
-              <CCardBody>
-                <CCardTitle>{category.name}</CCardTitle>
-                <CCardText>{category.description}</CCardText>
-                <div className="d-flex justify-content-end">
-                  <CButton
-                    color="danger"
-                    onClick={() => handleDelete(category.id)}
-                    className="mx-2"
-                  >
-                    Delete
-                  </CButton>
-                  <CButton
-                    color="primary"
-                    onClick={() => handleDelete(category.id)}
-                    className="mx-2"
-                  >
-                    Edit
-                  </CButton>
-                </div>
-              </CCardBody>
-            </CCard>
+          <CCol md={3}>
+            <CustomCard
+              key={category.id}
+              item={category}
+              onDeleteClick={handleDeleteClick}
+              linkTo={`/category/${category.id}/products`} // Trỏ đến trang sản phẩm
+            />
           </CCol>
         ))}
       </CRow>
+
+      {/* Modal xác nhận xóa */}
+      <DeleteModal
+        visible={visible}
+        onClose={() => setVisible(false)} // Đóng modal
+        onConfirm={handleConfirmDelete} // Xác nhận xóa
+      />
     </div>
   );
 };

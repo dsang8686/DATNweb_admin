@@ -1,5 +1,5 @@
-import React from 'react'
-import CIcon from '@coreui/icons-react'
+import React from "react";
+import CIcon from "@coreui/icons-react";
 import {
   cilBell,
   cilCalculator,
@@ -32,125 +32,126 @@ import {
   cilBarChart,
   cilChart,
   cilColorPalette,
-} from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
-
+} from "@coreui/icons";
+import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
 const _nav = [
   {
     component: CNavItem,
-    name: 'BẢNG ĐIỀU KHIỂN',
-    to: '/home',
+    name: "BẢNG ĐIỀU KHIỂN",
+    to: "/home",
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
   {
     component: CNavGroup,
-    name: 'THÔNG TIN',
-    to: '/info',
+    name: "THÔNG TIN",
+    to: "/info",
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Thông tin',
-        to: '/info',
+        name: "Thông tin",
+        to: "/info",
       },
 
       {
         component: CNavItem,
-        name: 'Thêm admin',
-        to: '/addinfo',
+        name: "Thêm admin",
+        to: "/addinfo",
       },
     ],
-
   },
 
   {
     component: CNavGroup,
-    name: 'QUẢN LÝ SẢN PHẨM',
-    to: '/product',
+    name: "QUẢN LÝ SẢN PHẨM",
+    to: "/product",
     icon: <CIcon icon={cilDevices} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Tất cả sản phẩm',
-        to: '/product',
+        name: "Danh mục sản phẩm",
+        to: "/category",
       },
       {
         component: CNavItem,
-        name: 'Danh mục sản phẩm',
-        to: '/category',
+        name: "Thêm danh mục",
+        to: "/category/add",
       },
       {
         component: CNavItem,
-        name: 'Thêm sản phẩm',
-        to: '/product/add',
+        name: "Tất cả sản phẩm",
+        to: "/allproducts",
       },
-     
+      {
+        component: CNavItem,
+        name: "Thêm sản phẩm",
+        to: "/addproduct-new",
+      },
     ],
   },
 
   {
     component: CNavGroup,
-    name: 'QUẢN LÝ',
-    to: '/coupon',
+    name: "QUẢN LÝ",
+    to: "/coupon",
     icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Quản lý ',
-        to: '/coupon',
+        name: "Quản lý ",
+        to: "/coupon",
       },
       {
         component: CNavItem,
-        name: 'Thêm mới ',
-        to: '/coupon/add',
+        name: "Thêm mới ",
+        to: "/coupon/add",
       },
     ],
   },
 
   {
     component: CNavGroup,
-    name: 'QUẢN LÝ ĐƠN HÀNG',
-    to: '/order',
+    name: "QUẢN LÝ ĐƠN HÀNG",
+    to: "/order",
     icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Trạng thái đơn hàng',
-        to: '/order/status',
+        name: "Trạng thái đơn hàng",
+        to: "/order/status",
       },
       {
         component: CNavItem,
-        name: 'Phương thức vận chuyển',
-        to: '/order/shipping-method',
+        name: "Phương thức vận chuyển",
+        to: "/order/shipping-method",
       },
       {
         component: CNavItem,
-        name: 'Phương thức thanh toán',
-        to: '/order/payment-method',
+        name: "Phương thức thanh toán",
+        to: "/order/payment-method",
       },
       {
         component: CNavItem,
-        name: 'Quản lý đơn hàng',
-        to: '/order',
+        name: "Quản lý đơn hàng",
+        to: "/order",
       },
     ],
   },
 
   {
     component: CNavGroup,
-    name: 'QUẢN LÝ THÀNH VIÊN',
-    to: '/member',
+    name: "QUẢN LÝ THÀNH VIÊN",
+    to: "/member",
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Quản lý thành viên',
-        to: '/member',
+        name: "Quản lý thành viên",
+        to: "/member",
       },
     ],
   },
+];
 
-]
-
-export default _nav
+export default _nav;
