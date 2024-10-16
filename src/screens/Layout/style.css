@@ -246,3 +246,12 @@ label {
   margin-left: 0;
 }
 
+
+.truncate {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2; /* Hiển thị tối đa 3 dòng */
+}
+
+

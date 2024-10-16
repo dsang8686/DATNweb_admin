@@ -1,12 +1,9 @@
-// src/screens/AddCategory.js
-
 import React, { useState } from "react";
-import { CButton, CCol, CForm, CFormInput, CFormTextarea } from "@coreui/react";
+import { CButton, CCol, CForm, CFormInput } from "@coreui/react";
 import { useNavigate } from "react-router-dom";
 
 const AddCategory = ({ onAddCategory }) => {
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [imageError, setImageError] = useState(""); // Trạng thái để xử lý lỗi ảnh
 
@@ -17,7 +14,6 @@ const AddCategory = ({ onAddCategory }) => {
     const newCategory = {
       id: Date.now(), // Sử dụng thời gian hiện tại làm ID duy nhất
       name,
-      description,
       image,
       products: [],
     };
@@ -47,10 +43,7 @@ const AddCategory = ({ onAddCategory }) => {
     <div className="container">
       <CCol className="d-flex justify-content-between my-3">
         <h4>THÊM DANH MỤC MỚI</h4>
-        <CButton
-          onClick={() => navigate("/category")}
-          color="primary"
-        >
+        <CButton onClick={() => navigate("/category")} color="primary">
           Danh sách
         </CButton>
       </CCol>
@@ -63,13 +56,6 @@ const AddCategory = ({ onAddCategory }) => {
           onChange={(e) => setName(e.target.value)}
           required
           className="my-4"
-        />
-        <CFormTextarea
-          placeholder="Mô tả"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="my-4"
-          required
         />
         <CFormInput
           type="file"

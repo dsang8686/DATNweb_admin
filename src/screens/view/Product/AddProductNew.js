@@ -137,30 +137,7 @@ const AddProductNew = ({ categories, onAddProduct }) => {
             />
           </div>
         )}
-        <h6>Chọn kích thước:</h6>
-        {sizesAvailable.map((size) => (
-          <div key={size} style={{ display: "flex", alignItems: "center" }} className="my-4">
-            <div style={{width: "6%"}} className="ps-3">
-              <CFormCheck
-                type="checkbox"
-                label={size}
-                value={size}
-                checked={sizes.includes(size)}
-                onChange={handleSizeChange}
-                style={{fontSize: 18}}
-              />
-            </div>
-            {sizes.includes(size) && (
-              <CFormInput
-                type="number"
-                placeholder={`Giá cho kích thước ${size}`}
-                value={prices[size] || ""}
-                onChange={(e) => handlePriceChange(size, e.target.value)}
-                className="ms-2"
-              />
-            )}
-          </div>
-        ))}
+        
         <CButton type="submit" color="primary" className="mt-3">
           Thêm Sản Phẩm
         </CButton>

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { CRow, CCol, CButton } from "@coreui/react";
+import { CRow, CCol, CCard, CCardBody, CCardImage, CCardTitle, CCardText, CButton } from "@coreui/react";
 import { Link } from "react-router-dom";
 import "./Category.css";
 import DeleteModal from "../../../Component/DeleteModal";
-import CustomCard from "../../../Component/CustomCard"; // Sử dụng CustomCard
 
 const Category = ({ categories, onDeleteCategory }) => {
   const [visible, setVisible] = useState(false);
@@ -38,13 +37,39 @@ const Category = ({ categories, onDeleteCategory }) => {
 
       <CRow>
         {categories.map((category) => (
-          <CCol md={3}>
-            <CustomCard
-              key={category.id}
-              item={category}
-              onDeleteClick={handleDeleteClick}
-              linkTo={`/category/${category.id}/products`} // Trỏ đến trang sản phẩm
-            />
+          <CCol md={3} key={category.id} className="mb-4">
+            <CCard>
+              <Link
+                to=""
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div className="image-container">
+                  <CCardImage
+                    className="custom-image"
+                    orientation="top"
+                    src={category.image}
+                    alt={category.name}
+                  />
+                </div>
+              </Link>
+
+              <CCardBody>
+                <CCardTitle>{category.name}</CCardTitle>
+
+                <div className="d-flex justify-content-end">
+                  <CButton
+                    color="danger"
+                    onClick={() => handleDeleteClick(category.id)}
+                    className="mx-2"
+                  >
+                    Delete
+                  </CButton>
+                  <CButton color="primary" className="mx-2">
+                    Edit
+                  </CButton>
+                </div>
+              </CCardBody>
+            </CCard>
           </CCol>
         ))}
       </CRow>

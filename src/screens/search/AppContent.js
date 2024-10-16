@@ -9,10 +9,10 @@ import Category from "../view/Category/Category.js";
 import Product from "../view/Product/Product.js";
 import AddCategory from "../view/Category/AddCategory.js";
 import categoriesData from "../../Data.js";
-import ProductDetail from "../view/Product/ProductDetail.js";
-import AddProduct from "../view/Product/AddProduct.js";
 import AllProduct from "../view/Product/AllProduct.js";
 import AddProductNew from "../view/Product/AddProductNew.js";
+import ProductDetail from  "../view/Product/ProductDetail.js";
+import AddProductDetail from "../view/Product/AddProductDetail.js";
 
 const AppContent = () => {
   const [categories, setCategories] = useState([]);
@@ -84,11 +84,13 @@ const AppContent = () => {
           <Route path="/category" element={<Category categories={categories} onAddCategory={addCategory} onDeleteCategory={deleteCategory} />} />
           <Route path="/category/add" element={<AddCategory onAddCategory={addCategory} />} />
           <Route path="/category/:id/products" element={<Product categories={categories} onDeleteProduct={handleDeleteProduct} />} />
-          <Route path="/category/:id/addproduct" element={<AddProduct categories={categories} onAddProduct={addProduct} />} />
           <Route path="/allproducts" element={<AllProduct categories={categories} />} />
 
+          <Route path="/category/:id/product/:productId" element={<ProductDetail categories={categories} />} />
+          <Route path="/addproduct-new/:productId" element={<AddProductDetail categories={categories} />} />
+
+
           <Route path="/addproduct-new" element={<AddProductNew categories={categories} onAddProduct={addProduct} />} />
-          {/* <Route path="/productdetail/:id" element={<ProductDetail/>} /> */}
           <Route path="/info" element={<Info />} />
           <Route path="/addInfo" element={<AddInfo />} />
         </Routes>
