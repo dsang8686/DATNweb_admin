@@ -11,10 +11,12 @@ import {
 import { Link } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css"; // Import CSS mặc định của Carousel
+import categories from "../../../Data";
 
+
+// Cấu hình responsive cho carousel
 const responsive = {
   superLargeDesktop: {
-    // Phân giải màn hình rất lớn
     breakpoint: { max: 4000, min: 1024 },
     items: 5,
   },
@@ -32,7 +34,8 @@ const responsive = {
   },
 };
 
-const AllProduct = ({ categories }) => {
+
+const AllProduct = () => {
   return (
     <div className="container">
       <CCol className="d-flex justify-content-between my-3">
@@ -63,7 +66,7 @@ const AllProduct = ({ categories }) => {
           </CCol>
 
           <Carousel responsive={responsive}>
-            {category.products.slice(0, 100).map((product) => (
+            {category.products.map((product) => (
               <div key={product.id} className="mb-4 me-1">
                 <CCard>
                   <Link
@@ -83,14 +86,16 @@ const AllProduct = ({ categories }) => {
                     <CCardTitle>{product.name}</CCardTitle>
                     <CCardText className="truncate">{product.description}</CCardText>
 
-                    <div className="d-flex justify-content-end">
+                    {/* <div className="d-flex justify-content-end">
                       <CButton color="danger" className="mx-2">
                         Delete
                       </CButton>
                       <CButton color="primary" className="mx-2">
                         Edit
                       </CButton>
-                    </div>
+                    </div> */}
+
+
                   </CCardBody>
                 </CCard>
               </div>

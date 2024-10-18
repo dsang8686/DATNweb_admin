@@ -93,19 +93,19 @@ const _nav = [
 
   {
     component: CNavGroup,
-    name: "QUẢN LÝ",
+    name: "QUẢN LÝ CỬA HÀNG",
     to: "/coupon",
     icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: "Quản lý ",
-        to: "/coupon",
+        name: "Quản lý cửa hàng",
+        to: "/restaurant",
       },
       {
         component: CNavItem,
-        name: "Thêm mới ",
-        to: "/coupon/add",
+        name: "Thêm mới cửa hàng",
+        to: "add-restaurant",
       },
     ],
   },
@@ -118,23 +118,18 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: "Trạng thái đơn hàng",
-        to: "/order/status",
+        name: "Đơn hàng",
+        to: "/orders",
       },
       {
         component: CNavItem,
         name: "Phương thức vận chuyển",
-        to: "/order/shipping-method",
+        to: "/add-order",
       },
       {
         component: CNavItem,
         name: "Phương thức thanh toán",
-        to: "/order/payment-method",
-      },
-      {
-        component: CNavItem,
-        name: "Quản lý đơn hàng",
-        to: "/order",
+        to: "/order/:orderId",
       },
     ],
   },

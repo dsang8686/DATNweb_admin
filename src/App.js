@@ -9,20 +9,23 @@ import {
   Routes,
   Route,
   Navigate,
-  Outlet,
 } from "react-router-dom";
+import Logout from "./screens/Login/Logout";
 
 function App() {
+  const isAuthenticated = localStorage.getItem("authToken") !== null; // Kiểm tra xem người dùng đã đăng nhập hay chưa
+
   return (
     <div>
       <Router>
         <Routes>
-          {/* authen */}
-          {/* <Route path="/" element={<Login />} /> */}
-          <Route path="/login" element={<Login />} />
-
-          <Route path="*" element={<DefaultLayout />} />
-
+          {/* Nếu chưa đăng nhập, điều hướng đến trang đăng nhập */}
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+          {/* Nếu đã đăng nhập, điều hướng đến DefaultLayout */}
+          <Route path="/" element={isAuthenticated ? <DefaultLayout /> : <Navigate to="/login" />} />
+          <Route path="/logout" element={<Logout />} />
+          {/* Điều hướng mọi route khác đến DefaultLayout */}
+          <Route path="*" element={isAuthenticated ? <DefaultLayout /> : <Navigate to="/login" />} />
         </Routes>
       </Router>
     </div>

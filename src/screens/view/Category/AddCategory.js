@@ -1,42 +1,58 @@
 import React, { useState } from "react";
 import { CButton, CCol, CForm, CFormInput } from "@coreui/react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Sử dụng axios để gửi yêu cầu
+import API_BASE_URL from '../../../API/config'; // Đường dẫn đến API
+import { toast } from 'react-toastify'; // Thông báo thành công hoặc lỗi
 
-const AddCategory = ({ onAddCategory }) => {
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [imageError, setImageError] = useState(""); // Trạng thái để xử lý lỗi ảnh
-
+const AddCategory = () => {
+  const [name, setName] = useState(''); // Trạng thái tên danh mục
+  const [image, setImage] = useState(null); // Trạng thái hình ảnh
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newCategory = {
-      id: Date.now(), // Sử dụng thời gian hiện tại làm ID duy nhất
-      name,
-      image,
-      products: [],
-    };
 
-    onAddCategory(newCategory); // Gọi hàm thêm danh mục
-    navigate("/category"); // Quay lại trang chính sau khi thêm
+    // Kiểm tra xem token có tồn tại không
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      toast.error('Bạn cần đăng nhập để thêm danh mục!');
+      navigate('/login');
+      return;
+    }
+
+    if (name && image) {
+      const formData = new FormData(); // Sử dụng FormData để gửi file
+      formData.append('name', name);
+      formData.append('image', image);
+
+      try {
+        const response = await axios.post(
+          `${API_BASE_URL}/api/v1/category`, // URL của API
+          formData,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`, // Thêm token vào header
+              'Content-Type': 'multipart/form-data', // Đặt loại nội dung là multipart
+            }
+          }
+        );
+
+        if (response.status === 201) {
+          toast.success('Danh mục đã được thêm thành công!'); // Thông báo thành công
+          navigate('/category'); // Quay về danh sách danh mục
+        }
+      } catch (error) {
+        toast.error('Có lỗi xảy ra. Vui lòng thử lại.'); // Thông báo lỗi
+        console.error('Error adding category:', error);
+      }
+    } else {
+      toast.warning('Vui lòng điền đầy đủ thông tin!'); // Thông báo nếu thiếu thông tin
+    }
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0]; // Lấy tệp đầu tiên từ input
-
-    // Kiểm tra xem tệp có phải là ảnh hay không
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result); // Cập nhật URL ảnh để lưu trữ
-        setImageError(""); // Reset lỗi
-      };
-      reader.readAsDataURL(file); // Đọc tệp ảnh
-    } else {
-      setImageError("Vui lòng chọn một tệp ảnh hợp lệ."); // Thiết lập lỗi nếu không phải là ảnh
-      setImage(""); // Reset image
-    }
+    setImage(e.target.files[0]); // Lấy file từ input
   };
 
   return (
@@ -52,19 +68,18 @@ const AddCategory = ({ onAddCategory }) => {
         <CFormInput
           type="text"
           placeholder="Tên danh mục"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
           required
           className="my-4"
+          value={name}
+          onChange={(e) => setName(e.target.value)} // Cập nhật trạng thái tên
         />
         <CFormInput
           type="file"
           accept="image/*" // Chỉ chấp nhận tệp ảnh
-          onChange={handleImageChange}
           className="my-4"
           required
+          onChange={handleImageChange} // Gọi hàm handleImageChange khi file được chọn
         />
-        {imageError && <p className="text-danger">{imageError}</p>} {/* Hiển thị lỗi nếu có */}
         <CButton type="submit" color="primary" className="mt-2">
           Thêm
         </CButton>

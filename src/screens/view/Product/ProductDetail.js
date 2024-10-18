@@ -7,10 +7,16 @@ import {
   CCardTitle,
   CCardText,
   CButton,
+  CTable,
+  CTableBody,
+  CTableRow,
+  CTableHeaderCell,
+  CTableDataCell,
 } from "@coreui/react";
 import BackButton from "../../../Component/BackButton";
+import categories from "../../../Data";
 
-const ProductDetail = ({ categories }) => {
+const ProductDetail = () => {
   const { id, productId } = useParams(); // Lấy categoryId và productId từ URL
   const category = categories.find((cat) => cat.id === parseInt(id));
   const product = category?.products.find(
@@ -35,7 +41,12 @@ const ProductDetail = ({ categories }) => {
             className="custom-image"
             src={product.image}
             alt={product.name}
-            style={{ width: "30%", height: "auto", marginTop: 100, marginLeft: 50 }}
+            style={{
+              width: "30%",
+              height: "auto",
+              marginTop: 150,
+              marginLeft: 50,
+            }}
           />
         </div>
 
@@ -49,7 +60,22 @@ const ProductDetail = ({ categories }) => {
           </CCard>
           <CCard className="mt-3">
             <CCardBody>
-              <CCardTitle>Chi tiết sản phẩm</CCardTitle>
+              <CCardTitle>
+                Chi tiết sản phẩm
+                {/* Bảng hiển thị kích thước và giá */}
+                <CTable>
+                  <CTableBody>
+                    {product.attributes.size.map((size, index) => (
+                      <CTableRow key={size}>
+                        <CTableDataCell>{size}</CTableDataCell>
+                        <CTableDataCell>
+                          {product.attributes.price[index]} USD
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
+                  </CTableBody>
+                </CTable>
+              </CCardTitle>
               <div className="d-flex justify-content-end">
                 <Link to={`/addproduct-new/${product.id}`}>
                   <CButton color="primary" className="mx-1">

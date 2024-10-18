@@ -1,87 +1,52 @@
-import { CButton, CCol, CContainer, CForm, CFormInput, CImage, CRow } from '@coreui/react'
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import {
+  CButton,
+  CCol,
+  CContainer,
+  CForm,
+  CFormInput,
+  CImage,
+  CRow,
+} from "@coreui/react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Info() {
-  const navigate = useNavigate()
-  const [userName, setUserName] = useState('')
-  const [email, setEmail] = useState('')
-  const [displayName, setDisplayName] = useState('')
-  const [phone, setPhone] = useState('')
-
-  const [adminId, setAdminId] = useState(null)
-
-  // upload image and show image
-  const [selectedFile, setSelectedFile] = useState('')
-  const [file, setFile] = useState([])
-
-  //set img avatar
-  function onFileChange(e) {
-    const files = e.target.files
-    const selectedFiles = []
-    const fileUrls = []
-
-    Array.from(files).forEach((file) => {
-      // Create a URL for the file
-      fileUrls.push(URL.createObjectURL(file))
-
-      // Read the file as base64
-      const fileReader = new FileReader()
-      fileReader.readAsDataURL(file)
-
-      fileReader.onload = (event) => {
-        selectedFiles.push(event.target.result)
-        // Set base64 data after all files have been read
-        if (selectedFiles.length === files.length) {
-          setSelectedFile(selectedFiles)
-        }
-      }
-    })
-
-    // Set file URLs for immediate preview
-    setFile(fileUrls)
-  }
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
 
   const fetchAdminInformation = async () => {
-    // try {
-      
-    //   const data = response.data.data
-    //   if (response.data.status === true) {
-    //     setAdminId(data.id)
-    //     setUserName(data.username)
-    //     setEmail(data.email)
-    //     setDisplayName(data.display_name)
-    //     setPhone(data.phone)
-    //     setSelectedFile(data.avatar)
-    //   }
-    // } catch (error) {
-    //   console.error('Fetch admin info data is error', error)
-    // }
-  }
+    // Bạn có thể gọi API để lấy thông tin admin ở đây
+    // Giả sử bạn đã có token trong localStorage để kiểm tra đăng nhập
+    const token = localStorage.getItem("authToken");
+
+    if (token) {
+      setIsLoggedIn(true); // Nếu có token, đánh dấu đã đăng nhập
+      // Gọi API lấy thông tin admin (thay thế URL API của bạn)
+      // const response = await axios.get('/api/admin/info', {
+      //   headers: { Authorization: `Bearer ${token}` }
+      // });
+      // const data = response.data;
+      // setUserName(data.userName);
+      // setEmail(data.email);
+      // setDisplayName(data.displayName);
+      // setPhone(data.phone);
+    } else {
+      toast.error("Bạn cần đăng nhập để xem thông tin này.");
+      navigate("/login"); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+    }
+  };
 
   useEffect(() => {
-    fetchAdminInformation()
-  }, [])
+    fetchAdminInformation();
+  }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    // try {
-    //   const response = await axiosClient.put(`admin/information/${adminId}`, {
-    //     email: email,
-    //     display_name: displayName,
-    //     avatar: selectedFile,
-    //     phone: phone,
-    //   })
-    //   if (response.data.status === true) {
-    //     toast.success('Cập nhật thông tin admin thành công!')
-    //     fetchAdminInformation()
-    //   }
-    // } catch (error) {
-    //   console.error('Put data admin info is error', error)
-    //   toast.error('Đã xảy ra lỗi. Vui lòng thử lại!')
-    // }
-  }
+    e.preventDefault();
+    // Xử lý cập nhật thông tin ở đây
+    // Có thể gọi API để cập nhật thông tin admin
+  };
 
   return (
     <CContainer>
@@ -92,7 +57,7 @@ function Info() {
         </CCol>
         <CCol md={6}>
           <div className="d-flex justify-content-end">
-            <Link to={'/admin/list'}>
+            <Link to={"/admin/list"}>
               <CButton color="primary" size="sm">
                 Thêm mới
               </CButton>
@@ -103,89 +68,34 @@ function Info() {
       <CRow>
         <CCol md={6}>
           <CForm className="row gy-3">
-            <CCol md={12}>
-              <CFormInput
-                id="inputEmail4"
-                label="Tên đăng nhập"
-                text="Không thể thay đổi"
-                value={userName}
-                disabled
-                onChange={(e) => setUserName(e.target.value)}
-              />
-            </CCol>
+            {isLoggedIn ? (
+              <>
+                <CCol md={12}>
+                  <CFormInput
+                    id="inputEmail4"
+                    label="Tên đăng nhập"
+                    value={userName}
+                    disabled
+                  />
+                </CCol>
 
-            <CCol md={12}>
-              <CFormInput
-                type="password"
-                id="inputPassword4"
-                label="Mật khẩu mới"
-                // value={adminInfo?.password}
-                disabled
-              />
-            </CCol>
-
-            <CCol md={12}>
-              <CFormInput
-                name="avatar"
-                type="file"
-                id="formFile"
-                label="Ảnh đại diện"
-                size="sm"
-                onChange={(e) => onFileChange(e)}
-              />
-              <br />
-
-              <div>
-                {file.length == 0 ? (
-                  <div>
-                    {/* <CImage src={`${imageBaseUrl}${selectedFile}`} width={200} /> */}
-                  </div>
-                ) : (
-                  file.map((item, index) => <CImage key={index} src={item} width={200} />)
-                )}
-              </div>
-            </CCol>
-            <br />
-
-            <CCol md={12}>
-              <CFormInput
-                id="inputAddress"
-                label="Thư điện tử"
-                text="Thư điện tử (bắt buộc)."
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </CCol>
-
-            <CCol md={12}>
-              <CFormInput
-                id="inputAddress2"
-                label="Tên hiển thị"
-                text="Tên hiển thị (bắt buộc)."
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-              />
-            </CCol>
-
-            <CCol md={12}>
-              <CFormInput
-                id="inputAddress2"
-                label="Số điện thoại"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </CCol>
-
-            <CCol xs={12}>
-              <CButton onClick={handleSubmit} color="primary" type="submit" size="sm">
-                Cập nhật
-              </CButton>
-            </CCol>
+                <CCol md={12}>
+                  <CFormInput
+                    type="password"
+                    id="inputPassword4"
+                    label="Mật khẩu mới"
+                    disabled
+                  />
+                </CCol>
+              </>
+            ) : (
+              <h6>Bạn chưa đăng nhập. Vui lòng đăng nhập để xem thông tin.</h6>
+            )}
           </CForm>
         </CCol>
       </CRow>
     </CContainer>
-  )
+  );
 }
 
-export default Info
+export default Info;

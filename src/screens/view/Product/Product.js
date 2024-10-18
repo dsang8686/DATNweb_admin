@@ -11,8 +11,10 @@ import {
   CCardText,
 } from "@coreui/react";
 import DeleteModal from "../../../Component/DeleteModal"; // Modal xác nhận xóa
+import categories from "../../../Data";
 
-const Product = ({ categories, onDeleteProduct }) => {
+
+const Product = () => {
   const { id } = useParams(); // Lấy ID từ URL
   const category = categories.find((cat) => cat.id === parseInt(id)); // Tìm danh mục theo ID
   const [visible, setVisible] = useState(false); // Quản lý trạng thái hiển thị modal
@@ -25,8 +27,7 @@ const Product = ({ categories, onDeleteProduct }) => {
 
   const handleConfirmDelete = () => {
     if (selectedProductId !== null) {
-      const categoryId = parseInt(id); // Lấy ID danh mục từ URL
-      onDeleteProduct(categoryId, selectedProductId); // Xóa sản phẩm
+      // Xử lý xóa sản phẩm
       setVisible(false); // Đóng modal sau khi xóa
     }
   };
@@ -43,7 +44,7 @@ const Product = ({ categories, onDeleteProduct }) => {
               to={`/allproducts`}
               style={{ color: "white", textDecoration: "none" }}
             >
-              Tất cả sản phấm
+              Tất cả sản phẩm
             </Link>
           </CButton>
 
