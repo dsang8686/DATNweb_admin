@@ -190,13 +190,68 @@ label {
   font-weight: 600;
 }
 
-
 .custom-sidebar6 {
   background-color: #0f79e3 !important;
   min-height: 100vh;
   width: 2500px;
 }
 
+/* Cập nhật lại cấu trúc và vị trí của wrapper */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Đảm bảo chiều cao tối thiểu là 100% chiều cao màn hình */
+}
 
+/* Đảm bảo header nằm trên cùng mà không bị chồng lấn */
+.header {
+  flex-shrink: 0; /* Đảm bảo header không bị thu nhỏ */
+  z-index: 10; /* Đặt header trên cùng */
+  position: relative; /* Đảm bảo không bị ảnh hưởng bởi các phần tử khác */
+}
+
+/* Đảm bảo nội dung không bị ảnh hưởng bởi sidebar hoặc header */
+.body {
+  flex-grow: 1;
+  position: relative; /* Đảm bảo nội dung không bị đè */
+  z-index: 1;
+  padding-top: 4rem; /* Tạo khoảng cách padding nếu cần cho header */
+}
+
+
+
+/* Bố cục chung */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Đảm bảo khi sidebar mở ra sẽ đẩy header và content */
+.wrapper.sidebar-visible .header,
+.wrapper.sidebar-visible .body {
+  margin-left: 250px; /* Đẩy nội dung bằng chiều rộng sidebar */
+  transition: margin 0.3s ease-in-out;
+}
+
+/* Sidebar hiển thị */
+.sidebar {
+  width: 250px; /* Chiều rộng sidebar */
+  transition: margin 0.3s ease-in-out;
+}
+
+/* Khi sidebar đóng */
+.wrapper.sidebar-hidden .header,
+.wrapper.sidebar-hidden .body {
+  margin-left: 0;
+}
+
+
+.truncate {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2; /* Hiển thị tối đa 3 dòng */
+}
 
 
