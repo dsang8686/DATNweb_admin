@@ -39,7 +39,7 @@ const RestaurantList = () => {
       <h3>Danh sách nhà hàng</h3>
       <CRow>
         {restaurants.map((restaurant) => (
-          <CCol key={restaurant.id} md={4}>
+          <CCol key={restaurant.id} md={3}>
             <RestaurantItem
               name={restaurant.name}
               location={restaurant.location}
