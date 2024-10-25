@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CButton, CCol, CForm, CFormInput } from "@coreui/react";
+import { CButton, CCol, CForm, CFormInput, CSpinner } from "@coreui/react"; // Import CSpinner
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Sử dụng axios để gửi yêu cầu
 import API_BASE_URL from '../../../API/config'; // Đường dẫn đến API
@@ -8,16 +8,19 @@ import { toast } from 'react-toastify'; // Thông báo thành công hoặc lỗi
 const AddCategory = () => {
   const [name, setName] = useState(''); // Trạng thái tên danh mục
   const [image, setImage] = useState(null); // Trạng thái hình ảnh
+  const [isSubmitting, setIsSubmitting] = useState(false); // Quản lý trạng thái submit
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Bắt đầu quá trình gửi yêu cầu
 
     // Kiểm tra xem token có tồn tại không
     const token = localStorage.getItem('authToken');
     if (!token) {
       toast.error('Bạn cần đăng nhập để thêm danh mục!');
       navigate('/login');
+      setIsSubmitting(false); // Đặt lại trạng thái submit
       return;
     }
 
@@ -39,15 +42,18 @@ const AddCategory = () => {
         );
 
         if (response.status === 201) {
-          toast.success('Danh mục đã được thêm thành công!'); // Thông báo thành công
+          toast.success('Danh mục đã được thêm thành công!'); 
           navigate('/category'); // Quay về danh sách danh mục
         }
       } catch (error) {
         toast.error('Có lỗi xảy ra. Vui lòng thử lại.'); // Thông báo lỗi
         console.error('Error adding category:', error);
+      } finally {
+        setIsSubmitting(false); // Đặt lại trạng thái submit khi hoàn thành
       }
     } else {
       toast.warning('Vui lòng điền đầy đủ thông tin!'); // Thông báo nếu thiếu thông tin
+      setIsSubmitting(false); // Đặt lại trạng thái submit khi không đủ thông tin
     }
   };
 
@@ -80,8 +86,8 @@ const AddCategory = () => {
           required
           onChange={handleImageChange} // Gọi hàm handleImageChange khi file được chọn
         />
-        <CButton type="submit" color="primary" className="mt-2">
-          Thêm
+        <CButton type="submit" color="primary" className="mt-3" disabled={isSubmitting}>
+          {isSubmitting ? <CSpinner size="sm" /> : "Thêm"} {/* Hiển thị spinner nếu đang gửi */}
         </CButton>
       </CForm>
     </div>

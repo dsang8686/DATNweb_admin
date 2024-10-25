@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { CRow, CCol, CCard, CCardBody, CCardImage, CCardTitle, CButton } from "@coreui/react";
+import {
+  CRow,
+  CCol,
+  CCard,
+  CCardBody,
+  CCardImage,
+  CCardTitle,
+  CButton,
+} from "@coreui/react";
 import { Link } from "react-router-dom";
 import "./Category.css";
 import DeleteModal from "../../../Component/DeleteModal";
-import API_BASE_URL from '../../../API/config';
+import API_BASE_URL from "../../../API/config";
 
 const Category = ({ onDeleteCategory }) => {
   const [categories, setCategories] = useState([]); // Khởi tạo state cho danh mục
   const [loading, setLoading] = useState(true); // Trạng thái loading
-  const [error, setError] = useState(''); // Trạng thái lỗi
+  const [error, setError] = useState(""); // Trạng thái lỗi
   const [visible, setVisible] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
@@ -16,7 +24,7 @@ const Category = ({ onDeleteCategory }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/category`); // Thay đổi URL cho đúng
       if (!response.ok) {
-        throw new Error('Không thể lấy dữ liệu danh mục'); // Xử lý lỗi nếu không thành công
+        throw new Error("Không thể lấy dữ liệu danh mục"); // Xử lý lỗi nếu không thành công
       }
       const data = await response.json();
       setCategories(data); // Cập nhật danh mục từ API
@@ -50,6 +58,8 @@ const Category = ({ onDeleteCategory }) => {
   if (error) {
     return <div>{error}</div>; // Thông báo lỗi nếu có
   }
+ 
+
 
   return (
     <div className="container">
@@ -70,10 +80,7 @@ const Category = ({ onDeleteCategory }) => {
         {categories.map((category) => (
           <CCol md={3} key={category.id} className="mb-4">
             <CCard>
-              <Link
-                to=""
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
+              <Link to="" style={{ textDecoration: "none", color: "inherit" }}>
                 <div className="image-container">
                   <CCardImage
                     className="custom-image"
@@ -88,15 +95,11 @@ const Category = ({ onDeleteCategory }) => {
                 <CCardTitle>{category.name}</CCardTitle>
 
                 <div className="d-flex justify-content-end">
-                  <CButton
-                    color="danger"
-                    onClick={() => handleDeleteClick(category.id)}
-                    className="mx-2"
-                  >
-                    Delete
+                  <CButton color="danger" className="mx-2">
+                    <i className="bi bi-trash"></i>
                   </CButton>
                   <CButton color="primary" className="mx-2">
-                    Edit
+                    <i className="bi bi-pencil-square"></i>
                   </CButton>
                 </div>
               </CCardBody>

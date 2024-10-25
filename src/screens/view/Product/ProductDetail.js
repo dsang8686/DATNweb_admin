@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   CCard,
@@ -10,18 +10,38 @@ import {
   CTable,
   CTableBody,
   CTableRow,
-  CTableHeaderCell,
   CTableDataCell,
 } from "@coreui/react";
 import BackButton from "../../../Component/BackButton";
-import categories from "../../../Data";
+import axios from "axios";
+import API_BASE_URL from "../../../API/config";
 
 const ProductDetail = () => {
-  const { id, productId } = useParams(); // Lấy categoryId và productId từ URL
-  const category = categories.find((cat) => cat.id === parseInt(id));
-  const product = category?.products.find(
-    (prod) => prod.id === parseInt(productId)
-  ); // Tìm sản phẩm theo productId
+  const { productId } = useParams(); // Lấy productId từ URL
+  const [product, setProduct] = useState(null); // Trạng thái cho sản phẩm
+  const [loading, setLoading] = useState(true); // Quản lý trạng thái loading
+
+  // Gọi API để lấy thông tin chi tiết sản phẩm
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/api/v1/products/${productId}`
+        );
+        setProduct(response.data); // Lưu sản phẩm vào state
+        setLoading(false); // Tắt trạng thái loading
+      } catch (error) {
+        console.error("Lỗi khi tải chi tiết sản phẩm:", error);
+        setLoading(false); // Tắt trạng thái loading nếu lỗi xảy ra
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) {
+    return <div>Đang tải chi tiết sản phẩm...</div>;
+  }
 
   if (!product) {
     return <h4>Không tìm thấy sản phẩm!</h4>;
@@ -34,57 +54,50 @@ const ProductDetail = () => {
         <BackButton />
       </div>
 
-      <div className="d-flex">
-        {/* Phần hình ảnh */}
-        <div className="me-4" style={{ flex: "0 0 30%" }}>
+      <div className="row">
+        {/* Phần hình ảnh, chiếm md=3 */}
+        <div className="col-md-4">
           <CCardImage
-            className="custom-image"
+            // className="custom-image"
             src={product.image}
             alt={product.name}
             style={{
-              width: "30%",
+              width: "100%", // Chiều rộng 100% của cột
               height: "auto",
-              marginTop: 150,
-              marginLeft: 50,
+              
             }}
           />
         </div>
 
-        {/* Phần thông tin sản phẩm */}
-        <div style={{ flex: "1" }}>
+        {/* Phần thông tin sản phẩm, chiếm md=7 */}
+        <div className="col-md-8">
           <CCard>
             <CCardBody>
+              <CCardTitle>Danh mục: {product.category.name}</CCardTitle>
               <CCardTitle>{product.name}</CCardTitle>
               <CCardText>{product.description}</CCardText>
             </CCardBody>
           </CCard>
+
           <CCard className="mt-3">
             <CCardBody>
-              <CCardTitle>
-                Chi tiết sản phẩm
-                {/* Bảng hiển thị kích thước và giá */}
-                <CTable>
-                  <CTableBody>
-                    {product.attributes.size.map((size, index) => (
-                      <CTableRow key={size}>
-                        <CTableDataCell>{size}</CTableDataCell>
-                        <CTableDataCell>
-                          {product.attributes.price[index]} USD
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
-                  </CTableBody>
-                </CTable>
-              </CCardTitle>
+              <CCardTitle>Kích cỡ và giá</CCardTitle>
+              {/* Bảng hiển thị kích thước và giá */}
+              <CTable>
+                <CTableBody>
+                  {/* Thông tin kích thước và giá sẽ được thêm ở đây */}
+                </CTableBody>
+              </CTable>
+
               <div className="d-flex justify-content-end">
-                <Link to={`/addproduct-new/${product.id}`}>
-                  <CButton color="primary" className="mx-1">
-                    Thêm
+                <CButton color="danger" className="mx-2">
+                  <i className="bi bi-trash"></i>
+                </CButton>
+                <Link to={`/addattributes-new/${product.id}`}>
+                  <CButton color="primary" className="mx-2">
+                    <i className="bi bi-pencil-square"></i>
                   </CButton>
                 </Link>
-                <CButton color="primary" className="mx-1">
-                  Chỉnh sửa
-                </CButton>
               </div>
             </CCardBody>
           </CCard>

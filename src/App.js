@@ -3,7 +3,7 @@ import "./App.css";
 
 import Login from "./screens/Login/Login";
 import DefaultLayout from "./screens/Layout/DefaultLayout";
-
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import {
   BrowserRouter as Router,
   Routes,
