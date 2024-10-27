@@ -55,7 +55,7 @@ const ProductDetail = () => {
       </div>
 
       <div className="row">
-        {/* Phần hình ảnh, chiếm md=3 */}
+       
         <div className="col-md-4">
           <CCardImage
             // className="custom-image"

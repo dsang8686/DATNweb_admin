@@ -19,7 +19,7 @@ import EditProduct from "../view/Product/EditProduct.js";
 import AddProductDetail from "../view/Product/AddProductDetail.js";
 
 // Nhóm nhà hàng
-import RestaurantList from "../view/Restaurant/RestaurantList.js";
+import Restaurant from "../view/Restaurant/Restaurant.js";
 import AddRestaurant from "../view/Restaurant/AddRestaurant.js";
 
 // Nhóm đơn hàng
@@ -32,6 +32,7 @@ import Logout from "../Login/Logout.js";
 
 // Import NotFound component
 import NotFound from "../NotFound.js";
+import EditRestaurant from "../view/Restaurant/EditRestaurant.js";
 
 
 const AppContent = () => {
@@ -55,8 +56,9 @@ const AppContent = () => {
           <Route path="/addattributes-new/:productId" element={<AddProductDetail  />} />
 
           {/* restaurant */}
-          <Route path="/restaurant" element={<RestaurantList />} />
+          <Route path="/restaurant" element={<Restaurant/>} />
           <Route path="/add-restaurant" element={<AddRestaurant />} />
+          <Route path="/edit-restaurant/:id" element={<EditRestaurant />} />
 
           {/* orders */}
           <Route path="/orders" element={<OrderManagement  />} />

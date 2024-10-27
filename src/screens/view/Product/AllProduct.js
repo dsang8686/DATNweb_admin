@@ -93,6 +93,19 @@ const AllProduct = () => {
     navigate(`/edit-product/${productId}`);
   };
 
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+        <CSpinner />
+      </div>
+    );
+  }
+
+  // if (error) {
+  //   return <div>{error}</div>;
+  // }
+
+
   return (
     <div className="container">
       <CCol className="d-flex justify-content-between my-3">
