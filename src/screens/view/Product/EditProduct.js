@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
+import UpdateSuccessModal from "../../../Component/UpdateSuccessModal";
+
 const EditProduct = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
@@ -28,6 +30,7 @@ const EditProduct = () => {
   const [isLoading, setIsLoading] = useState(true); // Quản lý trạng thái đang tải
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [isUpdateSuccessVisible, setIsUpdateSuccessVisible] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -46,7 +49,9 @@ const EditProduct = () => {
     const fetchProduct = async () => {
       setIsLoading(true); // Bắt đầu tải sản phẩm
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/v1/products/${id}`);
+        const response = await axios.get(
+          `${API_BASE_URL}/api/v1/products/${id}`
+        );
         if (response.data) {
           setProduct(response.data);
           setName(response.data.name);
@@ -69,30 +74,28 @@ const EditProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-  
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      toast.error("Bạn cần đăng nhập xem!");
+      navigate("/login");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
     formData.append("category", selectedCategory);
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
+    if (imageFile) formData.append("image", imageFile);
 
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      toast.error('Bạn cần đăng nhập xem!');
-      navigate('/login');
-      return;
-    }
-  
     try {
       await axios.put(`${API_BASE_URL}/api/v1/products/${id}`, formData, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("Cập nhật sản phẩm thành công!");
-      navigate('/allproducts');
+      setIsUpdateSuccessVisible(true);
     } catch (error) {
       setError("Lỗi khi cập nhật sản phẩm.");
       console.error(error);
@@ -103,15 +106,16 @@ const EditProduct = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
   if (isLoading) {
     return (
-      <div className="container d-flex justify-content-center align-items-center"  style={{ height: "200px" }}>
+      <div
+        className="container d-flex justify-content-center align-items-center"
+        style={{ height: "200px" }}
+      >
         <CSpinner />
       </div>
     ); // Hiển thị spinner khi đang tải
@@ -120,12 +124,14 @@ const EditProduct = () => {
   return (
     <div className="container">
       <CCol className="d-flex justify-content-between my-3">
-        <h4 style={{ textTransform: "uppercase" }}>Chỉnh Sửa Sản Phẩm: {product.name}</h4>
+        <h4 style={{ textTransform: "uppercase" }}>
+          Chỉnh Sửa Sản Phẩm: {product.name}
+        </h4>
         <BackButton label="Quay lại" />
       </CCol>
 
       <CForm onSubmit={handleSubmit}>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+       
         <CCol className="mb-3">
           <CFormSelect
             aria-label="Chọn danh mục"
@@ -162,7 +168,7 @@ const EditProduct = () => {
           accept="image/*"
           onChange={handleImageChange}
           className="my-4"
-          required
+         
         />
         {imagePreview && (
           <div>
@@ -184,6 +190,14 @@ const EditProduct = () => {
           {isSubmitting ? <CSpinner /> : "Cập Nhật Sản Phẩm"}
         </CButton>
       </CForm>
+
+      <UpdateSuccessModal
+        visible={isUpdateSuccessVisible}
+        onClose={() => {
+          setIsUpdateSuccessVisible(false);
+          navigate("/allproducts"); // Chuyển hướng sau khi đóng modal
+        }}
+      />
     </div>
   );
 };

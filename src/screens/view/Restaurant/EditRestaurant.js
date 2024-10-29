@@ -58,7 +58,7 @@ const EditRestaurant = () => {
 
       await axios.put(`${API_BASE_URL}/api/v1/restaurants/${id}`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // kiểm trả token
         },
       });
 

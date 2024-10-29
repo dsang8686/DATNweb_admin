@@ -32,6 +32,7 @@ import {
   cilBarChart,
   cilChart,
   cilColorPalette,
+  cilAccountLogout,
 } from "@coreui/icons";
 import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
@@ -146,6 +147,13 @@ const _nav = [
         to: "/member",
       },
     ],
+  },
+ 
+  {
+    component: CNavItem,
+    name: "LOGOUT",
+    to: "/logout",
+    icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
   },
 ];
 
