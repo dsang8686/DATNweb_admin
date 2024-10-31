@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CForm, CFormInput, CFormLabel, CButton, CContainer } from '@coreui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CForm, CFormInput, CFormLabel, CButton, CContainer, CCol, CSpinner } from '@coreui/react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import SuccessModal from '../../../Component/SuccessModal';
 import API_BASE_URL from '../../../API/config';
 
 const AddRestaurant = () => {
   const [name, setName] = useState('');
-  const [location, setLocation] = useState('');
-  const [image, setImage] = useState(null); // Đổi type từ string sang file
-  const [review, setReview] = useState(''); // Thêm state cho review
+  const [address, setAddress] = useState('');
+  const [image, setImage] = useState(null);
+  const [review, setReview] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); // Quản lý trạng thái của modal
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Kiểm tra xem token có tồn tại không
     const token = localStorage.getItem('authToken');
     if (!token) {
       toast.error('Bạn cần đăng nhập để thêm nhà hàng!');
@@ -23,14 +25,13 @@ const AddRestaurant = () => {
       return;
     }
 
-    if (name && location && image && review) { // Kiểm tra nếu có review
-      const formData = new FormData(); // Sử dụng FormData để gửi file
+    if (name && address && image && review) {
+      setLoading(true);
+      const formData = new FormData();
       formData.append('name', name);
-      formData.append('location', location);
-      formData.append('review', review); // Thêm review vào formData
+      formData.append('address', address);
+      formData.append('review', review);
       formData.append('image', image);
-
-      console.log('>>>>>>>>>>>>>>', formData);
 
       try {
         const response = await axios.post(
@@ -39,31 +40,46 @@ const AddRestaurant = () => {
           {
             headers: { 
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data', // Đặt loại nội dung là multipart
+              'Content-Type': 'multipart/form-data',
             }
           }
         );
-        if (response.status === 201) {
-          toast.success('Nhà hàng đã được thêm thành công!');
-          navigate('/restaurants');
-        }
+       
+          setModalVisible(true); // Hiển thị modal khi thêm thành công
+   
       } catch (error) {
         toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
         console.error('Error adding restaurant:', error);
+      } finally {
+        setLoading(false);
       }
     } else {
-      toast.warning('Vui lòng điền đầy đủ thông tin!'); // Thông báo nếu thiếu thông tin
+      toast.warning('Vui lòng điền đầy đủ thông tin!');
     }
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Lấy file từ input
+    setImage(e.target.files[0]);
+  };
+
+  // Hàm để đóng modal và chuyển hướng về trang restaurant
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    navigate('/restaurant'); // Chuyển hướng sau khi đóng modal
   };
 
   return (
-    <CContainer className="mt-4">
-      <h3>Thêm nhà hàng mới</h3>
-      <CForm onSubmit={handleSubmit}>
+    <CContainer>
+      <CCol className="d-flex justify-content-between my-3">
+        <h4 className="mb-4">THÊM CỬA HÀNG MỚI</h4>
+        <CButton color="primary" className="mb-3">
+          <Link to="/restaurant" style={{ color: "white", textDecoration: "none" }}>
+            Danh sách
+          </Link>
+        </CButton>
+      </CCol>
+
+      <CForm>
         <div className="mb-3">
           <CFormLabel htmlFor="restaurantName">Tên nhà hàng</CFormLabel>
           <CFormInput
@@ -75,12 +91,12 @@ const AddRestaurant = () => {
           />
         </div>
         <div className="mb-3">
-          <CFormLabel htmlFor="restaurantLocation">Địa chỉ</CFormLabel>
+          <CFormLabel htmlFor="restaurantAddress">Địa chỉ</CFormLabel>
           <CFormInput
             type="text"
-            id="restaurantLocation"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            id="restaurantAddress"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             required
           />
         </div>
@@ -89,24 +105,27 @@ const AddRestaurant = () => {
           <CFormInput
             type="file"
             id="restaurantImage"
-            onChange={handleImageChange} // Gọi hàm handleImageChange khi file được chọn
+            onChange={handleImageChange}
             required
           />
         </div>
         <div className="mb-3">
           <CFormLabel htmlFor="restaurantReview">Đánh giá</CFormLabel>
           <CFormInput
-            type="text"
+            type="number"
             id="restaurantReview"
             value={review}
-            onChange={(e) => setReview(e.target.value)} // Cập nhật state review
+            onChange={(e) => setReview(e.target.value)}
             required
           />
         </div>
-        <CButton type="submit" color="primary">
-          Thêm nhà hàng
+        <CButton type="submit" color="primary" onClick={handleSubmit} disabled={loading}>
+          {loading ? <CSpinner size="sm" /> : 'Thêm nhà hàng'}
         </CButton>
       </CForm>
+
+      {/* Hiển thị modal thành công */}
+      <SuccessModal visible={modalVisible} onClose={handleCloseModal} />
     </CContainer>
   );
 };

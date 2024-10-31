@@ -3,6 +3,7 @@ import {
   CCol,
   CContainer,
   CForm,
+  CFormCheck,
   CFormInput,
   CImage,
   CRow,
@@ -10,31 +11,91 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 function Info() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState("");
+  const [admin, setAdmin] = useState(false);
+  const [image, setImage] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const fetchAdminInformation = async () => {
-    // Bạn có thể gọi API để lấy thông tin admin ở đây
-    // Giả sử bạn đã có token trong localStorage để kiểm tra đăng nhập
     const token = localStorage.getItem("authToken");
+    const userId = localStorage.getItem("userId");
 
-    if (token) {
-      setIsLoggedIn(true); // Nếu có token, đánh dấu đã đăng nhập
-      // Gọi API lấy thông tin admin (thay thế URL API của bạn)
-      // const response = await axios.get('/api/admin/info', {
-      //   headers: { Authorization: `Bearer ${token}` }
-      // });
-      // const data = response.data;
-      // setUserName(data.userName);
-      // setEmail(data.email);
-      // setDisplayName(data.displayName);
-      // setPhone(data.phone);
+    if (token && userId) {
+      setIsLoggedIn(true);
+
+      try {
+        const response = await axios.get(
+          `https://app-datn-gg.onrender.com/api/v1/users/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        const data = response.data;
+        setUserName(data.name);
+        setEmail(data.email);
+        setPhone(data.phone);
+        setGender(data.gender);
+        setAdmin(data.isAdmin);
+        setImage(data.image);
+        setPreviewImage(data.image);
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin admin:", error);
+        toast.error("Không thể lấy thông tin admin.");
+      }
     } else {
       toast.error("Bạn cần đăng nhập để xem thông tin này.");
-      navigate("/login"); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+      navigate("/login");
+    }
+  };
+
+  const handleEditToggle = () => setIsEditing(!isEditing);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSave = async () => {
+    const token = localStorage.getItem("authToken");
+    const userId = localStorage.getItem("userId");
+    if (!token) return toast.error("Vui lòng đăng nhập lại.");
+
+    const formData = new FormData();
+    formData.append("name", userName);
+    formData.append("phone", phone);
+    formData.append("gender", gender);
+    formData.append("isAdmin", admin);
+    if (image) formData.append("image", image);
+
+    try {
+      await axios.put(
+        `http://localhost:3000/api/v1/users/${userId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success("Cập nhật thông tin thành công!");
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật thông tin:", error);
+      toast.error("Không thể cập nhật thông tin.");
     }
   };
 
@@ -42,50 +103,113 @@ function Info() {
     fetchAdminInformation();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Xử lý cập nhật thông tin ở đây
-    // Có thể gọi API để cập nhật thông tin admin
-  };
-
   return (
     <CContainer>
-      <CRow className="mb-3">
-        <CCol md={6}>
-          <h2>THÔNG TIN ADMIN</h2>
-          <h6>Thông tin tài khoản</h6>
-        </CCol>
-        <CCol md={6}>
-          <div className="d-flex justify-content-end">
-            <Link to={"/admin/list"}>
-              <CButton color="primary" size="sm">
-                Thêm mới
-              </CButton>
-            </Link>
-          </div>
-        </CCol>
-      </CRow>
+      <CCol className="d-flex justify-content-between my-3">
+        <h4 className="mb-4">THÔNG TIN ADMIN</h4>
+        <CButton color="primary" className="mb-3">
+          <Link
+            to={"/admin/list"}
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Thêm admin mới
+          </Link>
+        </CButton>
+      </CCol>
+
+      <CCol
+        md={12}
+        className="d-flex justify-content-between "
+        style={{ alignItems: "center" }}
+      >
+        <h6>Thông tin tài khoản</h6>
+        <button className="mb-3 border-0">
+          <Link style={{ color: "white", textDecoration: "none" }}>
+            <div onClick={handleEditToggle}>
+              {isEditing ? (
+                <div>
+                  <CButton
+                    color="danger"
+                    className="bi bi-x-square"
+                    style={{ fontSize: 20 }}
+                  />
+                  <CButton
+                    color="success"
+                    className="bi bi-check2-square ms-2"
+                    style={{ fontSize: 20 }}
+                    onClick={handleSave}
+                  />
+                </div>
+              ) : (
+                <CButton
+                  color="primary"
+                  className="bi bi-pencil-square"
+                  style={{ fontSize: 20 }}
+                />
+              )}
+            </div>
+          </Link>
+        </button>
+      </CCol>
+
       <CRow>
-        <CCol md={6}>
-          <CForm className="row gy-3">
+        <CCol md={12}>
+          <CForm className="row gy-3 mt-1">
             {isLoggedIn ? (
               <>
                 <CCol md={12}>
                   <CFormInput
-                    id="inputEmail4"
-                    label="Tên đăng nhập"
+                    label="Tên Admin"
                     value={userName}
-                    disabled
+                    onChange={(e) => setUserName(e.target.value)}
+                    disabled={!isEditing}
                   />
                 </CCol>
-
+                <CCol md={12}>
+                  <CFormInput label="Email" value={email} disabled />
+                </CCol>
                 <CCol md={12}>
                   <CFormInput
-                    type="password"
-                    id="inputPassword4"
-                    label="Mật khẩu mới"
-                    disabled
+                    label="Số điện thoại"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    disabled={!isEditing}
                   />
+                </CCol>
+                <CCol md={12}>
+                  <CFormInput
+                    label="Giới tính"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    disabled={!isEditing}
+                  />
+                </CCol>
+                <CCol md={12}>
+                  <CFormCheck
+                    type="checkbox"
+                    id="adminCheck"
+                    label="Admin"
+                    checked={admin}
+                    onChange={(e) => setAdmin(e.target.checked)}
+                    disabled={!isEditing}
+                  />
+                </CCol>
+                <CCol md={12}>
+                  <CFormInput
+                    type="file"
+                    label="Ảnh đại diện"
+                    onChange={handleImageChange}
+                    disabled={!isEditing}
+                  />
+                  {previewImage && (
+                    <CImage
+                      src={previewImage}
+                      alt="Profile Preview"
+                      width="200"
+                      rounded
+                      className="mt-3"
+                    />
+                  )}
                 </CCol>
               </>
             ) : (

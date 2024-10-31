@@ -13,4 +13,6 @@
   height: 100%;
   object-fit: cover;
   /* justify-content: space-between; */
+  /* align-items: center; */
+  /* text-align: center; */
 }

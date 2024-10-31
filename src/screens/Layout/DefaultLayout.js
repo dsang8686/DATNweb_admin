@@ -11,6 +11,7 @@ import "@coreui/coreui/dist/css/coreui.min.css";
 
 import "./../Layout/style.css";
 import AppContent from "../search/AppContent";
+import BackToTop from "../../Component/BackToTop";
 
 const DefaultLayout = () => {
   return (
@@ -25,6 +26,7 @@ const DefaultLayout = () => {
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader className="header" /> {/* Header */}
         <div className="">
+          <BackToTop/>
           <AppContent />
         </div>
       </div>

@@ -7,65 +7,89 @@ import {
   CCardImage,
   CCardTitle,
   CButton,
+  CSpinner,
 } from "@coreui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Category.css";
 import DeleteModal from "../../../Component/DeleteModal";
 import API_BASE_URL from "../../../API/config";
+import axios from "axios";
 
-const Category = ({ onDeleteCategory }) => {
+const Category = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]); // Khởi tạo state cho danh mục
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [error, setError] = useState(""); // Trạng thái lỗi
   const [visible, setVisible] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-
+    
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/category`); // Thay đổi URL cho đúng
+      const response = await fetch(`${API_BASE_URL}/api/v1/category`);
       if (!response.ok) {
-        throw new Error("Không thể lấy dữ liệu danh mục"); // Xử lý lỗi nếu không thành công
+        throw new Error("Không thể lấy dữ liệu danh mục");
       }
       const data = await response.json();
-      setCategories(data); // Cập nhật danh mục từ API
+      setCategories(data);
     } catch (error) {
-      setError(error.message); // Lưu thông báo lỗi
+      setError(error.message);
     } finally {
-      setLoading(false); // Đặt trạng thái loading thành false
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCategories(); // Gọi hàm fetchCategories khi component được mount
+    fetchCategories();
   }, []);
 
   const handleDeleteClick = (id) => {
-    setSelectedCategoryId(id); // Lưu ID của danh mục cần xóa
-    setVisible(true); // Hiển thị modal
+    setSelectedCategoryId(id);
+    setVisible(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedCategoryId !== null) {
-      onDeleteCategory(selectedCategoryId); // Xóa danh mục
-      setVisible(false); // Đóng modal sau khi xóa
+  const handleConfirmDelete = async () => {
+    const token = localStorage.getItem("authToken");
+  if (!token) {
+    console.error("Không có token, vui lòng đăng nhập.");
+    navigate("/login");
+    return;
+  }
+    if (selectedCategoryId) {
+      try {
+        await axios.delete(
+          `http://localhost:3000/api/v1/category/${selectedCategoryId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Thêm token vào header
+            },
+          });
+          await fetchCategories();
+      } catch (error) {
+        console.error("Có lỗi xảy ra khi xóa danh mục.");
+      } finally {
+        setVisible(false);
+      }
     }
   };
 
   if (loading) {
-    return <div>Đang tải danh mục...</div>; // Thông báo khi đang tải
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "200px" }}
+      >
+        <CSpinner color="primary" />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>; // Thông báo lỗi nếu có
+    return <div>{error}</div>;
   }
- 
-
 
   return (
     <div className="container">
       <CCol className="d-flex justify-content-between my-3">
         <h4 className="mb-4">DANH SÁCH DANH MỤC</h4>
-
         <CButton color="primary" className="mb-3">
           <Link
             to="/category/add"
@@ -93,12 +117,19 @@ const Category = ({ onDeleteCategory }) => {
 
               <CCardBody>
                 <CCardTitle>{category.name}</CCardTitle>
-
                 <div className="d-flex justify-content-end">
-                  <CButton color="danger" className="mx-2">
+                  <CButton
+                    color="danger"
+                    className="mx-2"
+                    onClick={() => handleDeleteClick(category._id)}
+                  >
                     <i className="bi bi-trash"></i>
                   </CButton>
-                  <CButton color="primary" className="mx-2">
+                  <CButton
+                    color="primary"
+                    className="mx-2"
+                    onClick={() => navigate(`/category/edit/${category._id}`)}
+                  >
                     <i className="bi bi-pencil-square"></i>
                   </CButton>
                 </div>
@@ -108,11 +139,10 @@ const Category = ({ onDeleteCategory }) => {
         ))}
       </CRow>
 
-      {/* Modal xác nhận xóa */}
       <DeleteModal
         visible={visible}
-        onClose={() => setVisible(false)} // Đóng modal
-        onConfirm={handleConfirmDelete} // Xác nhận xóa
+        onClose={() => setVisible(false)}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );

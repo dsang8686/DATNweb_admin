@@ -9,6 +9,7 @@ import AddInfo from "../view/info/AddInfo.js";
 
 // Nhóm danh mục
 import Category from "../view/Category/Category.js";
+import EditCategory from "../view/Category/EditCategory.js";
 import AddCategory from "../view/Category/AddCategory.js";
 
 // Nhóm sản phẩm
@@ -16,10 +17,10 @@ import AllProduct from "../view/Product/AllProduct.js";
 import AddProductNew from "../view/Product/AddProductNew.js";
 import ProductDetail from "../view/Product/ProductDetail.js";
 import EditProduct from "../view/Product/EditProduct.js";
-import AddProductDetail from "../view/Product/AddProductDetail.js";
+
 
 // Nhóm nhà hàng
-import RestaurantList from "../view/Restaurant/RestaurantList.js";
+import Restaurant from "../view/Restaurant/Restaurant.js";
 import AddRestaurant from "../view/Restaurant/AddRestaurant.js";
 
 // Nhóm đơn hàng
@@ -32,6 +33,7 @@ import Logout from "../Login/Logout.js";
 
 // Import NotFound component
 import NotFound from "../NotFound.js";
+import EditRestaurant from "../view/Restaurant/EditRestaurant.js";
 
 
 const AppContent = () => {
@@ -46,17 +48,18 @@ const AppContent = () => {
           {/* category */}
           <Route path="/category" element={<Category />} />
           <Route path="/category/add" element={<AddCategory />} />
+          <Route path="/category/edit/:id" element={<EditCategory />} />
 
           {/* product */}
           <Route path="/allproducts" element={<AllProduct/>} />
           <Route path="/product-detail/:productId" element={<ProductDetail  />} />
           <Route path="/addproduct-new" element={<AddProductNew />} />
           <Route path="/edit-product/:id" element={<EditProduct />} />
-          <Route path="/addattributes-new/:productId" element={<AddProductDetail  />} />
 
           {/* restaurant */}
-          <Route path="/restaurant" element={<RestaurantList />} />
+          <Route path="/restaurant" element={<Restaurant/>} />
           <Route path="/add-restaurant" element={<AddRestaurant />} />
+          <Route path="/edit-restaurant/:id" element={<EditRestaurant />} />
 
           {/* orders */}
           <Route path="/orders" element={<OrderManagement  />} />

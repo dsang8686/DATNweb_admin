@@ -1,64 +1,63 @@
 import React, { useState } from "react";
-import { CButton, CCol, CForm, CFormInput, CSpinner } from "@coreui/react"; // Import CSpinner
+import { CButton, CCol, CForm, CFormInput, CSpinner } from "@coreui/react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Sử dụng axios để gửi yêu cầu
-import API_BASE_URL from '../../../API/config'; // Đường dẫn đến API
-import { toast } from 'react-toastify'; // Thông báo thành công hoặc lỗi
+import axios from "axios";
+import API_BASE_URL from '../../../API/config';
+import { toast } from 'react-toastify';
+import SuccessModal from "../../../Component/SuccessModal"; // Import SuccessModal
 
 const AddCategory = () => {
-  const [name, setName] = useState(''); // Trạng thái tên danh mục
-  const [image, setImage] = useState(null); // Trạng thái hình ảnh
-  const [isSubmitting, setIsSubmitting] = useState(false); // Quản lý trạng thái submit
+  const [name, setName] = useState('');
+  const [image, setImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false); // Trạng thái modal thành công
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Bắt đầu quá trình gửi yêu cầu
+    setIsSubmitting(true);
 
-    // Kiểm tra xem token có tồn tại không
     const token = localStorage.getItem('authToken');
     if (!token) {
       toast.error('Bạn cần đăng nhập để thêm danh mục!');
       navigate('/login');
-      setIsSubmitting(false); // Đặt lại trạng thái submit
+      setIsSubmitting(false);
       return;
     }
 
     if (name && image) {
-      const formData = new FormData(); // Sử dụng FormData để gửi file
+      const formData = new FormData();
       formData.append('name', name);
       formData.append('image', image);
 
       try {
         const response = await axios.post(
-          `${API_BASE_URL}/api/v1/category`, // URL của API
+          `${API_BASE_URL}/api/v1/category`,
           formData,
           {
             headers: {
-              'Authorization': `Bearer ${token}`, // Thêm token vào header
-              'Content-Type': 'multipart/form-data', // Đặt loại nội dung là multipart
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
             }
           }
         );
 
         if (response.status === 201) {
-          toast.success('Danh mục đã được thêm thành công!'); 
-          navigate('/category'); // Quay về danh sách danh mục
+          setIsSuccessModalVisible(true); // Hiển thị modal khi thêm thành công
         }
       } catch (error) {
-        toast.error('Có lỗi xảy ra. Vui lòng thử lại.'); // Thông báo lỗi
-        console.error('Error adding category:', error);
+        toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
       } finally {
-        setIsSubmitting(false); // Đặt lại trạng thái submit khi hoàn thành
+        setIsSubmitting(false);
       }
     } else {
-      toast.warning('Vui lòng điền đầy đủ thông tin!'); // Thông báo nếu thiếu thông tin
-      setIsSubmitting(false); // Đặt lại trạng thái submit khi không đủ thông tin
+      toast.warning('Vui lòng điền đầy đủ thông tin!');
+      setIsSubmitting(false);
     }
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Lấy file từ input
+    setImage(e.target.files[0]);
   };
 
   return (
@@ -77,19 +76,31 @@ const AddCategory = () => {
           required
           className="my-4"
           value={name}
-          onChange={(e) => setName(e.target.value)} // Cập nhật trạng thái tên
+          onChange={(e) => setName(e.target.value)}
         />
         <CFormInput
           type="file"
-          accept="image/*" // Chỉ chấp nhận tệp ảnh
+          accept="image/*"
           className="my-4"
           required
-          onChange={handleImageChange} // Gọi hàm handleImageChange khi file được chọn
+          onChange={handleImageChange}
         />
         <CButton type="submit" color="primary" className="mt-3" disabled={isSubmitting}>
-          {isSubmitting ? <CSpinner size="sm" /> : "Thêm"} {/* Hiển thị spinner nếu đang gửi */}
+          {isSubmitting ? <CSpinner size="sm" /> : "Thêm"}
         </CButton>
       </CForm>
+
+      {/* Success Modal */}
+      {isSuccessModalVisible && (
+        <SuccessModal
+          visible={isSuccessModalVisible}
+          message="Thêm mới thành công!"
+          onClose={() => {
+            setIsSuccessModalVisible(false);
+            navigate("/category"); // Điều hướng sau khi đóng modal
+          }}
+        />
+      )}
     </div>
   );
 };

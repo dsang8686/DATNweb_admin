@@ -16,8 +16,9 @@ const Login = () => {
         password,
       });
 
-      const { token } = response.data; // Giả sử API trả về token trong response
+      const { token, userId } = response.data; // Giả sử API trả về cả token và _id của user
       localStorage.setItem("authToken", token); // Lưu token vào localStorage
+      localStorage.setItem("userId", userId); // Lưu _id của user vào localStorage
 
       window.location.href = "/"; // Chuyển hướng về trang chủ
     } catch (error) {
