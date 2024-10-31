@@ -23,6 +23,7 @@ const EditCategory = () => {
         );
         setName(response.data.name);
         setImagePreview(response.data.image);
+        // console.log(">>>>>>>>", name)
       } catch (error) {
         toast.error("Không thể lấy dữ liệu danh mục.");
       }
