@@ -115,7 +115,6 @@ const EditRestaurant = () => {
             type="file"
             id="restaurantImage"
             onChange={handleImageChange}
-            required
           />
           {/* Hiển thị hình ảnh xem trước nếu có */}
           {imagePreview && (

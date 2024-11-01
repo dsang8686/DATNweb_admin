@@ -34,6 +34,7 @@ import Logout from "../Login/Logout.js";
 // Import NotFound component
 import NotFound from "../NotFound.js";
 import EditRestaurant from "../view/Restaurant/EditRestaurant.js";
+import OrderMissinginfo from "../view/Order/OrderMissinginfo.js";
 
 
 const AppContent = () => {
@@ -63,6 +64,7 @@ const AppContent = () => {
 
           {/* orders */}
           <Route path="/orders" element={<OrderManagement  />} />
+          <Route path="/orders/missing-info" element={<OrderMissinginfo  />} />
           <Route path="/add-order" element={<AddOrder />} />
           <Route path="/order/:orderId" element={<OrderDetail />} />
 

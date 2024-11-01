@@ -44,7 +44,7 @@ const AppSidebar = () => {
     <CSidebar
       className="border-end"
       colorScheme="dark"
-      position="fixed"
+      position="sticky"
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
@@ -81,7 +81,7 @@ const AppSidebar = () => {
 
       <CSidebarHeader className="border-top">
         <CSidebarToggler
-        style={{ height: '40px', width: '40px', marginLeft: 'auto' }}
+        style={{ height: 20, width: 20, marginLeft: 'auto' }}
           onClick={
             // () => dispatch({ type: "set", sidebarUnfoldable: !unfoldable })
             () => dispatch({ type: "set", sidebarShow: !sidebarShow })

@@ -22,7 +22,7 @@ const DefaultLayout = () => {
         zIndex: "0", // Đặt zIndex hợp lý
       }}
     >
-      <AppSidebar /> {/* Sidebar */}
+      <AppSidebar />
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader className="header" /> {/* Header */}
         <div className="">

@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import API_BASE_URL from '../../../API/config';
 
 function AddInfo() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function AddInfo() {
     };
 
     try {
-      await axios.post('http://localhost:3000/api/v1/users/register', data);
+      await axios.post(`${API_BASE_URL}api/v1/users/register`, data);
       toast.success('Thêm tài khoản thành công!');
       navigate('/admin/list'); // Chuyển hướng sau khi thêm thành công
     } catch (error) {

@@ -22,7 +22,7 @@ const Category = () => {
   const [error, setError] = useState(""); // Trạng thái lỗi
   const [visible, setVisible] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-    
+
   const fetchCategories = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/category`);
@@ -49,20 +49,22 @@ const Category = () => {
 
   const handleConfirmDelete = async () => {
     const token = localStorage.getItem("authToken");
-  if (!token) {
-    console.error("Không có token, vui lòng đăng nhập.");
-    navigate("/login");
-    return;
-  }
+    if (!token) {
+      console.error("Không có token, vui lòng đăng nhập.");
+      navigate("/login");
+      return;
+    }
     if (selectedCategoryId) {
       try {
         await axios.delete(
-          `http://localhost:3000/api/v1/category/${selectedCategoryId}`, {
+          `${API_BASE_URL}api/v1/category/${selectedCategoryId}`,
+          {
             headers: {
               Authorization: `Bearer ${token}`, // Thêm token vào header
             },
-          });
-          await fetchCategories();
+          }
+        );
+        await fetchCategories();
       } catch (error) {
         console.error("Có lỗi xảy ra khi xóa danh mục.");
       } finally {
@@ -102,7 +104,7 @@ const Category = () => {
 
       <CRow>
         {categories.map((category) => (
-          <CCol md={3} key={category.id} className="mb-4">
+          <CCol xs={12} sm={6} md={4} lg={3} key={category.id} className="mb-4">
             <CCard>
               <Link to="" style={{ textDecoration: "none", color: "inherit" }}>
                 <div className="image-container">
