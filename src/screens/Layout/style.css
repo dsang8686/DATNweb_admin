@@ -252,7 +252,42 @@ label {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  -webkit-line-clamp: 2; /* Hiển thị tối đa 3 dòng */
+  -webkit-line-clamp: 2; /* Hiển thị tối đa ... dòng */
 }
 
 
+.status-failed {
+  color: red;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.status-success {
+  color: green;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: blue;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+
+
+/* styles.css hoặc file CSS của bạn */
+.custom-pagination .pagination-item {
+  font-size: 1.25rem; /* Tăng kích thước chữ */
+  padding: 10px 15px; /* Tăng kích thước của các nút */
+}
+
+.custom-pagination .pagination-item.active {
+  background-color: #007bff; /* Màu nền cho nút đang hoạt động */
+  color: white; /* Màu chữ cho nút đang hoạt động */
+}
+
+.custom-pagination .pagination-item:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+  color: white; /* Màu chữ khi hover */
+}

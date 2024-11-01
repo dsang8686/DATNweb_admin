@@ -119,13 +119,13 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: "Đơn hàng",
+        name: "Tất cả đơn hàng",
         to: "/orders",
       },
       {
         component: CNavItem,
-        name: "Phương thức vận chuyển",
-        to: "/add-order",
+        name: "Đơn hàng thiếu thông tin",
+        to: "/orders/missing-info",
       },
       {
         component: CNavItem,

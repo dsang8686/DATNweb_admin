@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import API_BASE_URL from "../../../API/config";
 
 function Info() {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ function Info() {
 
     try {
       await axios.put(
-        `http://localhost:3000/api/v1/users/${userId}`,
+        `${API_BASE_URL}/api/v1/users/${userId}`,
         formData,
         {
           headers: {
@@ -199,7 +200,7 @@ function Info() {
                     type="file"
                     label="Ảnh đại diện"
                     onChange={handleImageChange}
-                    disabled={!isEditing}
+                    
                   />
                   {previewImage && (
                     <CImage
