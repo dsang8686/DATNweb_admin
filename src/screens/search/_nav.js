@@ -54,12 +54,6 @@ const _nav = [
         name: "Thông tin",
         to: "/info",
       },
-
-      {
-        component: CNavItem,
-        name: "Thêm admin",
-        to: "/addinfo",
-      },
     ],
   },
 
@@ -95,7 +89,7 @@ const _nav = [
   {
     component: CNavGroup,
     name: "QUẢN LÝ CỬA HÀNG",
-    to: "/coupon",
+    to: "/restaurant",
     icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
     items: [
       {
@@ -127,11 +121,11 @@ const _nav = [
         name: "Đơn hàng thiếu thông tin",
         to: "/orders/missing-info",
       },
-      {
-        component: CNavItem,
-        name: "Phương thức thanh toán",
-        to: "/order/:orderId",
-      },
+      // {
+      //   component: CNavItem,
+      //   name: "Phương thức thanh toán",
+      //   to: "/order/:orderId",
+      // },
     ],
   },
 
@@ -143,8 +137,18 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: "Quản lý thành viên",
+        name: "Thành viên admin",
         to: "/member",
+      },
+      {
+        component: CNavItem,
+        name: "Thêm admin",
+        to: "/addinfo",
+      },
+      {
+        component: CNavItem,
+        name: "User",
+        to: "/member-user",
       },
     ],
   },

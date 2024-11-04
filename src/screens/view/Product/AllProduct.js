@@ -27,10 +27,14 @@ const AllProduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/v1/products/get/active`);
-        
+        const response = await axios.get(
+          `${API_BASE_URL}/api/v1/products/get/active`
+        );
+
         // Lọc sản phẩm có `category` khác `null`
-        const filteredProducts = response.data.filter(product => product.category);
+        const filteredProducts = response.data.filter(
+          (product) => product.category
+        );
 
         setProducts(filteredProducts);
 
@@ -98,7 +102,10 @@ const AllProduct = () => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "200px" }}
+      >
         <CSpinner />
       </div>
     );
@@ -106,7 +113,7 @@ const AllProduct = () => {
 
   return (
     <div className="container">
-      <CCol className="d-flex justify-content-between my-3">
+      <CCol className="d-flex justify-content-between align-items-center my-3">
         <h4 className="mb-4">DANH SÁCH TẤT CẢ SẢN PHẨM</h4>
 
         <CButton color="primary" className="mb-3">
@@ -118,6 +125,18 @@ const AllProduct = () => {
           </Link>
         </CButton>
       </CCol>
+
+      {/* Thanh tìm kiếm */}
+      <div className="mx-3" style={{ position: "relative" }}>
+        <CButton style={{ position: "absolute", top: 0, right: 0 }}>
+          Tìm Kiếm <i className="ms- 1 bi bi-search"/>
+        </CButton>
+        <input
+          type="text"
+          placeholder="Tìm kiếm sản phẩm... chưa làm"
+          className="form-control"
+        />
+      </div>
 
       {Object.keys(groupedProducts).map((categoryName) => (
         <div key={categoryName} className="mb-4">
@@ -152,9 +171,7 @@ const AllProduct = () => {
                     </div>
                   </Link>
                   <CCardBody>
-                    <CCardTitle className="truncate">
-                      {product.name}
-                    </CCardTitle>
+                    <CCardTitle className="truncate">{product.name}</CCardTitle>
                     <CCardText className="truncate">
                       {product.description}
                     </CCardText>
@@ -164,14 +181,20 @@ const AllProduct = () => {
                         className="mx-2"
                         onClick={() => handleDeleteClick(product._id)}
                       >
-                        <i style={{color: "white"}} className="bi bi-trash"></i>
+                        <i
+                          style={{ color: "white" }}
+                          className="bi bi-trash"
+                        ></i>
                       </CButton>
                       <CButton
                         color="primary"
                         className="mx-2"
                         onClick={() => handleEditClick(product._id)}
                       >
-                        <i style={{color: "white"}} className="bi bi-pencil-square"></i>
+                        <i
+                          style={{ color: "white" }}
+                          className="bi bi-pencil-square"
+                        ></i>
                       </CButton>
 
                       <CButton
@@ -179,7 +202,7 @@ const AllProduct = () => {
                         className="mx-2"
                         onClick={() => handleViewDetail(product._id)}
                       >
-                        <i  style={{color: "white"}} className="bi bi-eye"></i>
+                        <i style={{ color: "white" }} className="bi bi-eye"></i>
                       </CButton>
                     </div>
                   </CCardBody>
