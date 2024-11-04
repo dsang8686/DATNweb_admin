@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./Login.css";
 import API_BASE_URL from "../../API/config";
+import { CSpinner } from "@coreui/react";
 
 const Login = () => {
   const [email, setEmail] = useState(""); // Trạng thái email
@@ -56,8 +57,7 @@ const Login = () => {
             {loading ? (
               <span>Đang đăng nhập...</span> // Hiển thị thông báo khi loading
             ) : (
-              <>
-                
+              <>         
                 <p className="dangnhap">Đăng nhập</p>
               </>
             )}

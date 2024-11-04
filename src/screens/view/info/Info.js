@@ -82,16 +82,12 @@ function Info() {
     if (image) formData.append("image", image);
 
     try {
-      await axios.put(
-        `${API_BASE_URL}/api/v1/users/${userId}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.put(`${API_BASE_URL}/api/v1/users/${userId}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Cập nhật thông tin thành công!");
       setIsEditing(false);
     } catch (error) {
@@ -108,14 +104,14 @@ function Info() {
     <CContainer>
       <CCol className="d-flex justify-content-between my-3">
         <h4 className="mb-4">THÔNG TIN ADMIN</h4>
-        <CButton color="primary" className="mb-3">
+        {/* <CButton color="primary" className="mb-3">
           <Link
             to={"/admin/list"}
             style={{ color: "white", textDecoration: "none" }}
           >
             Thêm admin mới
           </Link>
-        </CButton>
+        </CButton> */}
       </CCol>
 
       <CCol
@@ -200,7 +196,6 @@ function Info() {
                     type="file"
                     label="Ảnh đại diện"
                     onChange={handleImageChange}
-                    
                   />
                   {previewImage && (
                     <CImage

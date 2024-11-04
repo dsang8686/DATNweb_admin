@@ -250,9 +250,10 @@ const OrderManagement = ({ onDeleteOrder }) => {
                       <i className="bi bi-x-square" />
                     </CButton>
                   ) : (
-                    <CButton color="danger" className="mx-2">
-                      <i style={{ color: "white" }} className="bi bi-trash"></i>
-                    </CButton>
+                    // <CButton color="danger" className="mx-2">
+                    //   <i style={{ color: "white" }} className="bi bi-trash"></i>
+                    // </CButton>
+                    <></>
                   )}
                   {editingOrderId === order.orderId ? (
                     <CButton

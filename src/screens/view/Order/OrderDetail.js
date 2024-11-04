@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import {
-  CButton,
-  CCard,
-  CCol,
-  CContainer,
-  CRow,
-  CSpinner,
-} from "@coreui/react";
+import { CButton, CCard, CCol, CContainer, CRow, CSpinner } from "@coreui/react";
 import API_BASE_URL from "../../../API/config";
 
 const OrderDetail = () => {
@@ -17,6 +10,9 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
+  const [completedItems, setCompletedItems] = useState(
+    JSON.parse(localStorage.getItem("completedItems")) || []
+  );
 
   useEffect(() => {
     const fetchOrderDetail = async () => {
@@ -36,7 +32,6 @@ const OrderDetail = () => {
     fetchOrderDetail();
   }, [orderId]);
 
-  // fech cửa hàng
   useEffect(() => {
     if (order && order.restaurant) {
       const fetchRestaurantDetails = async () => {
@@ -52,7 +47,15 @@ const OrderDetail = () => {
 
       fetchRestaurantDetails();
     }
-  }, [order]); // Chạy khi `order` thay đổi
+  }, [order]);
+
+  const handleComplete = (itemId) => {
+    if (!completedItems.includes(itemId)) {
+      const updatedCompletedItems = [...completedItems, itemId];
+      setCompletedItems(updatedCompletedItems);
+      localStorage.setItem("completedItems", JSON.stringify(updatedCompletedItems));
+    }
+  };
 
   if (loading) {
     return (
@@ -71,7 +74,6 @@ const OrderDetail = () => {
     <CContainer className="mt-4">
       <CCol className="d-flex justify-content-between my-3">
         <h4 className="mb-4">THÔNG TIN CHI TIẾT</h4>
-
         <CButton color="primary" className="mb-3">
           <Link to="/orders" style={{ color: "white", textDecoration: "none" }}>
             Danh sách
@@ -97,7 +99,7 @@ const OrderDetail = () => {
           </span>
         </p>
         <p>
-          Tổng tiền: <strong>{order.totalPrice} VND</strong>
+          Tổng tiền: <strong>{order.totalPrice.toLocaleString('vi-VN')} VND</strong>
         </p>
         {restaurants ? (
           <p>
@@ -107,7 +109,7 @@ const OrderDetail = () => {
         ) : (
           <strong>
             <p style={{ color: "red" }}>Chưa chọn cửa hàng</p>
-          </strong> // Thông báo hiển thị khi không có thông tin nhà hàng
+          </strong>
         )}
         <p>
           Ngày đặt hàng:{" "}
@@ -116,10 +118,15 @@ const OrderDetail = () => {
       </div>
       <h5>Chi tiết sản phẩm:</h5>
 
-      <CRow>
+      <CRow className="mb-4">
         {order.orderItems.map((item, index) => (
           <CCol key={item._id} xs={12} sm={6} md={6} lg={4}>
-            <CCard className="mb-3 p-3 border rounded" style={{ fontSize: 16 }}>
+            <CCard
+              className={`mb-3 p-3 border rounded ${
+                completedItems.includes(item._id) ? "bg-secondary text-white" : ""
+              }`}
+              style={{ fontSize: 16 }}
+            >
               <p>
                 <strong>Đơn hàng #{index + 1}</strong>
               </p>
@@ -128,9 +135,11 @@ const OrderDetail = () => {
               <p>- Kích thước và giá:</p>
               <ul>
                 <li>Kích thước: {item.attribute.size}</li>
-                <li>Giá: {item.attribute.price} VND</li>
-                {/* Thêm các thuộc tính khác nếu cần */}
+                <li>Giá: {item.attribute.price.toLocaleString('vi-VN')} VND</li>
               </ul>
+              {!completedItems.includes(item._id) && (
+                <button onClick={() => handleComplete(item._id)}>Hoàn thành</button>
+              )}
             </CCard>
           </CCol>
         ))}
