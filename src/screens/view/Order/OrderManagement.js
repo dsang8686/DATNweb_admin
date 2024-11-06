@@ -26,7 +26,12 @@ const OrderManagement = ({ onDeleteOrder }) => {
   const fetchOrders = async (status = "") => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/v1/orders${status ? `?status=${status}` : ""}`
+        `${API_BASE_URL}/api/v1/orders${status ? `?status=${status}` : ""}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const ordersData = response.data
         .map((order) => ({
