@@ -145,7 +145,7 @@ const MemberPage = () => {
                 <p>Email: {member.email}</p>
                 <p>Điện thoại: {member.phone}</p>
                 <CFormCheck
-                  label="isAdmin"
+                  label="Admin"
                   name="isAdmin"
                   checked={
                     selectedMember?._id === member._id
@@ -156,7 +156,7 @@ const MemberPage = () => {
                   onChange={handleCheckboxChange}
                 />
                 <CFormCheck
-                  label="isVerified"
+                  label="xác thực"
                   name="isVerified"
                   checked={
                     selectedMember?._id === member._id
@@ -167,7 +167,7 @@ const MemberPage = () => {
                   onChange={handleCheckboxChange}
                 />
                 <CFormCheck
-                  label="isActive"
+                  label="Hoạt động"
                   name="isActive"
                   checked={
                     selectedMember?._id === member._id
