@@ -14,11 +14,18 @@ const OrderDetail = () => {
     JSON.parse(localStorage.getItem("completedItems")) || []
   );
 
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchOrderDetail = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/v1/orders/${orderId}`
+          `${API_BASE_URL}/api/v1/orders/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setOrder(response.data);
         setLoading(false);
