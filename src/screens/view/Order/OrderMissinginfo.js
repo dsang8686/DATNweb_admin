@@ -9,13 +9,16 @@ const OrderMissinginfo = ({ onDeleteOrder }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [editingOrderId, setEditingOrderId] = useState(null);
-  const [newStatus, setNewStatus] = useState("");
   // Lấy danh sách đơn hàng từ API
   const fetchOrders = async (status = "") => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/v1/orders${status ? `?status=${status}` : ""}`
+        `${API_BASE_URL}/api/v1/orders${status ? `?status=${status}` : ""}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const ordersData = response.data
         .map((order) => ({
@@ -49,6 +52,13 @@ const OrderMissinginfo = ({ onDeleteOrder }) => {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    console.error("Bạn cần đăng nhập để thêm danh mục!");
+    navigate("/login");
+    return;
+  }
 
   const handleFilter = (status) => {
     fetchOrders(status);
