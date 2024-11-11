@@ -80,6 +80,16 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: "Sản phẩm ẩn",
+        to: "/allproducts_unActive",
+      },
+      {
+        component: CNavItem,
+        name: "Tìm kiếm sản phẩm",
+        to: "/search-product",
+      },
+      {
+        component: CNavItem,
         name: "Thêm sản phẩm",
         to: "/addproduct-new",
       },

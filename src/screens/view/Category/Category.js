@@ -57,7 +57,7 @@ const Category = () => {
     if (selectedCategoryId) {
       try {
         await axios.delete(
-          `${API_BASE_URL}api/v1/category/${selectedCategoryId}`,
+          `${API_BASE_URL}/api/v1/category/${selectedCategoryId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Thêm token vào header

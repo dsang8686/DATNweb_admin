@@ -10,9 +10,7 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
-  const [completedItems, setCompletedItems] = useState(
-    JSON.parse(localStorage.getItem("completedItems")) || []
-  );
+ 
 
   const token = localStorage.getItem("authToken");
 
@@ -56,13 +54,6 @@ const OrderDetail = () => {
     }
   }, [order]);
 
-  const handleComplete = (itemId) => {
-    if (!completedItems.includes(itemId)) {
-      const updatedCompletedItems = [...completedItems, itemId];
-      setCompletedItems(updatedCompletedItems);
-      localStorage.setItem("completedItems", JSON.stringify(updatedCompletedItems));
-    }
-  };
 
   if (loading) {
     return (
@@ -129,9 +120,7 @@ const OrderDetail = () => {
         {order.orderItems.map((item, index) => (
           <CCol key={item._id} xs={12} sm={6} md={6} lg={4}>
             <CCard
-              className={`mb-3 p-3 border rounded ${
-                completedItems.includes(item._id) ? "bg-secondary text-white" : ""
-              }`}
+              className={`mb-3 p-3 border rounded`}
               style={{ fontSize: 16 }}
             >
               <p>
@@ -144,9 +133,7 @@ const OrderDetail = () => {
                 <li>Kích thước: {item.attribute.size}</li>
                 <li>Giá: {item.attribute.price.toLocaleString('vi-VN')} VND</li>
               </ul>
-              {!completedItems.includes(item._id) && (
-                <button onClick={() => handleComplete(item._id)}>Hoàn thành</button>
-              )}
+           
             </CCard>
           </CCol>
         ))}

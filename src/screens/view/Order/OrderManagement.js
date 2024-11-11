@@ -22,7 +22,6 @@ const OrderManagement = ({ onDeleteOrder }) => {
   const [editingOrderId, setEditingOrderId] = useState(null);
   const [newStatus, setNewStatus] = useState("");
 
-  // Lấy danh sách đơn hàng từ API và sắp xếp mới nhất trước
   const fetchOrders = async (status = "") => {
     try {
       const response = await axios.get(
@@ -42,7 +41,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
           restaurant: order.restaurant?.name,
           restaurantaddress: order.restaurant?.address,
           user: order.user?.name,
-          dateOrdered: order.dateOrdered, // Thêm trường dateOrdered
+          dateOrdered: order.dateOrdered,
         }))
         .filter(
           (order) =>
@@ -53,7 +52,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
             order.restaurant &&
             order.user
         )
-        .sort((a, b) => (a.dateOrdered > b.dateOrdered ? -1 : 1)); // Sắp xếp mới nhất lên đầu
+        .sort((a, b) => (a.dateOrdered > b.dateOrdered ? -1 : 1));
 
       setOrders(ordersData);
       setLoading(false);
@@ -76,10 +75,11 @@ const OrderManagement = ({ onDeleteOrder }) => {
     navigate(`/order/${productId}`);
   };
 
-  // trạng thái chỉnh sửa
   const handleEditClick = (orderId, currentStatus) => {
-    setEditingOrderId(orderId);
-    setNewStatus(currentStatus);
+    if (currentStatus === "Pending") {
+      setEditingOrderId(orderId);
+      setNewStatus(currentStatus);
+    }
   };
 
   const handleStatusChange = (e) => {
@@ -115,7 +115,6 @@ const OrderManagement = ({ onDeleteOrder }) => {
     setCurrentPage(pageNumber);
   };
 
-  // Tính toán dữ liệu đơn hàng hiện tại để hiển thị trên trang
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
@@ -196,36 +195,9 @@ const OrderManagement = ({ onDeleteOrder }) => {
                       onChange={handleStatusChange}
                       className={`status-${order.status.toLowerCase()}`}
                     >
-                      <option
-                        value="Pending"
-                        style={{
-                          color: "blue",
-                          fontSize: 18,
-                          fontWeight: "600",
-                        }}
-                      >
-                        Pending
-                      </option>
-                      <option
-                        value="Success"
-                        style={{
-                          color: "green",
-                          fontSize: 18,
-                          fontWeight: "600",
-                        }}
-                      >
-                        Success
-                      </option>
-                      <option
-                        value="Failed"
-                        style={{
-                          color: "red",
-                          fontSize: 18,
-                          fontWeight: "600",
-                        }}
-                      >
-                        Failed
-                      </option>
+                      <option value="Pending">Pending</option>
+                      <option value="Success">Success</option>
+                      <option value="Failed">Failed</option>
                     </select>
                   ) : (
                     <span className={`status-${order.status.toLowerCase()}`}>
@@ -233,18 +205,15 @@ const OrderManagement = ({ onDeleteOrder }) => {
                     </span>
                   )}
                 </p>
-                {/* <p>Tổng tiền: {order.totalPrice} VND</p> */}
                 <p>
                   Thời gian đặt hàng:{" "}
                   {new Date(order.dateOrdered).toLocaleString("vi-VN")}
-                </p>{" "}
-                {/* Hiển thị dateOrdered */}
+                </p>
                 <p>Cửa hàng:</p>
                 <ul>
                   <li>{order.restaurant}</li>
                   <li>{order.restaurantaddress}</li>
                 </ul>
-            
                 <div className="d-flex justify-content-end">
                   {editingOrderId === order.orderId ? (
                     <CButton
@@ -255,10 +224,20 @@ const OrderManagement = ({ onDeleteOrder }) => {
                       <i className="bi bi-x-square" />
                     </CButton>
                   ) : (
-                    // <CButton color="danger" className="mx-2">
-                    //   <i style={{ color: "white" }} className="bi bi-trash"></i>
-                    // </CButton>
-                    <></>
+                    order.status === "Pending" && (
+                      <CButton
+                        color="primary"
+                        className="mx-2"
+                        onClick={() =>
+                          handleEditClick(order.orderId, order.status)
+                        }
+                      >
+                        <i
+                          style={{ color: "white" }}
+                          className="bi bi-pencil-square"
+                        ></i>
+                      </CButton>
+                    )
                   )}
                   {editingOrderId === order.orderId ? (
                     <CButton
@@ -268,22 +247,6 @@ const OrderManagement = ({ onDeleteOrder }) => {
                     >
                       <i className="bi bi-check2-square"></i>
                     </CButton>
-                  ) : (
-                    <CButton
-                      color="primary"
-                      className="mx-2"
-                      onClick={() =>
-                        handleEditClick(order.orderId, order.status)
-                      }
-                    >
-                      <i
-                        style={{ color: "white" }}
-                        className="bi bi-pencil-square"
-                      ></i>
-                    </CButton>
-                  )}
-                  {editingOrderId === order.orderId ? (
-                    <></>
                   ) : (
                     <CButton
                       color="success"
@@ -302,15 +265,20 @@ const OrderManagement = ({ onDeleteOrder }) => {
         )}
       </CRow>
 
-      {/* Phân trang */}
       <CPagination align="center" className="mt-3 custom-pagination">
-  {Array.from({ length: Math.ceil(orders.length / ordersPerPage) }, (_, i) => (
-    <CPaginationItem key={i} active={i + 1 === currentPage} onClick={() => handlePageChange(i + 1)}>
-      {i + 1}
-    </CPaginationItem>
-  ))}
-</CPagination>
-
+        {Array.from(
+          { length: Math.ceil(orders.length / ordersPerPage) },
+          (_, i) => (
+            <CPaginationItem
+              key={i}
+              active={i + 1 === currentPage}
+              onClick={() => handlePageChange(i + 1)}
+            >
+              {i + 1}
+            </CPaginationItem>
+          )
+        )}
+      </CPagination>
     </div>
   );
 };

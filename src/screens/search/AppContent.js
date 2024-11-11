@@ -36,6 +36,8 @@ import Logout from "../Login/Logout.js";
 // trang không tồn tại
 import NotFound from "../NotFound.js";
 import MemberUserPage from "../view/info/MemberUserPage.js";
+import AllProductUnActive from "../view/Product/AllProductUnActive.js";
+import SearchProduct from "../view/Product/SearchProduct.js";
 
 
 const AppContent = () => {
@@ -54,6 +56,8 @@ const AppContent = () => {
 
           {/* product */}
           <Route path="/allproducts" element={<AllProduct/>} />
+          <Route path="/allproducts_unActive" element={<AllProductUnActive/>} />
+          <Route path="/search-product" element={<SearchProduct/>} />
           <Route path="/product-detail/:productId" element={<ProductDetail  />} />
           <Route path="/addproduct-new" element={<AddProductNew />} />
           <Route path="/edit-product/:id" element={<EditProduct />} />
