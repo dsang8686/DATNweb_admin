@@ -15,6 +15,7 @@ import axios from "axios";
 import API_BASE_URL from "../../../API/config";
 import DeleteModal from "../../../Component/DeleteModal"; // Import DeleteModal
 import { toast } from "react-toastify";
+import ActiveModal from "../../../Component/ActiveModal";
 
 const AllProduct = () => {
   const [products, setProducts] = useState([]);
@@ -24,39 +25,39 @@ const AllProduct = () => {
   const [selectedProductId, setSelectedProductId] = useState(null); // Lưu ID của sản phẩm cần xóa
   const navigate = useNavigate();
 
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/api/v1/products/get/active`
+      );
+
+      // Lọc sản phẩm có `category` khác `null`
+      const filteredProducts = response.data.filter(
+        (product) => product.category
+      );
+
+      setProducts(filteredProducts);
+
+      const grouped = filteredProducts.reduce((acc, product) => {
+        const categoryName = product.category.name;
+        if (!acc[categoryName]) {
+          acc[categoryName] = [];
+        }
+        acc[categoryName].push(product);
+        return acc;
+      }, {});
+
+      setGroupedProducts(grouped);
+      setLoading(false);
+    } catch (error) {
+      console.error("Lỗi khi tải sản phẩm:", error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          `${API_BASE_URL}/api/v1/products/get/active`
-        );
-
-        // Lọc sản phẩm có `category` khác `null`
-        const filteredProducts = response.data.filter(
-          (product) => product.category
-        );
-
-        setProducts(filteredProducts);
-
-        const grouped = filteredProducts.reduce((acc, product) => {
-          const categoryName = product.category.name;
-          if (!acc[categoryName]) {
-            acc[categoryName] = [];
-          }
-          acc[categoryName].push(product);
-          return acc;
-        }, {});
-
-        setGroupedProducts(grouped);
-        setLoading(false);
-      } catch (error) {
-        console.error("Lỗi khi tải sản phẩm:", error);
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
-  }, [products]);
+  }, []);
 
   const handleViewDetail = (productId) => {
     navigate(`/product-detail/${productId}`);
@@ -76,22 +77,28 @@ const AllProduct = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(
+      await axios.put(
         `${API_BASE_URL}/api/v1/products/${selectedProductId}`,
+        { isActive: false }, // Thêm dữ liệu gửi lên
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
       setProducts(
-        products.filter((product) => product._id !== selectedProductId)
-      ); // Cập nhật danh sách sản phẩm sau khi xóa
+        products.map((product) =>
+          product._id === selectedProductId
+            ? { ...product, isActive: false }
+            : product
+        )
+      ); // Cập nhật danh sách sản phẩm sau khi chuyển trạng thái
       setVisible(false); // Đóng modal
+      fetchProducts()
     } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
+      console.error("Lỗi khi chuyển trạng thái sản phẩm:", error);
       setVisible(false); // Đóng modal ngay cả khi lỗi
     }
   };
@@ -125,18 +132,6 @@ const AllProduct = () => {
           </Link>
         </CButton>
       </CCol>
-
-      {/* Thanh tìm kiếm */}
-      <div className="mx-3" style={{ position: "relative" }}>
-        <CButton style={{ position: "absolute", top: 0, right: 0 }}>
-          Tìm Kiếm <i className="ms- 1 bi bi-search"/>
-        </CButton>
-        <input
-          type="text"
-          placeholder="Tìm kiếm sản phẩm... chưa làm"
-          className="form-control"
-        />
-      </div>
 
       {Object.keys(groupedProducts).map((categoryName) => (
         <div key={categoryName} className="mb-4">
@@ -183,7 +178,7 @@ const AllProduct = () => {
                       >
                         <i
                           style={{ color: "white" }}
-                          className="bi bi-trash"
+                          className="bi bi-eye-slash"
                         ></i>
                       </CButton>
                       <CButton
@@ -214,7 +209,7 @@ const AllProduct = () => {
       ))}
 
       {/* Modal để xác nhận xóa sản phẩm */}
-      <DeleteModal
+      <ActiveModal
         visible={visible}
         onClose={() => setVisible(false)}
         onConfirm={handleDeleteConfirm}

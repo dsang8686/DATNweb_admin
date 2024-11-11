@@ -76,7 +76,7 @@ const Home = () => {
   }, [filterType]);
 
   return (
-    <div className="container">
+    <div className="container mb-4">
       <CRow className="mt-3">
         <CCol xs={12} md={5}>
           <h4 className="mb-4">QUẢN LÝ DOANH THU</h4>
