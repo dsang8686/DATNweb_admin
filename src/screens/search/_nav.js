@@ -70,6 +70,11 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: "Danh mục đã ẩn",
+        to: "/category-unactive",
+      },
+      {
+        component: CNavItem,
         name: "Thêm danh mục",
         to: "/category/add",
       },

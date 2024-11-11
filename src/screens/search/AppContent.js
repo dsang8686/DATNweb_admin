@@ -38,6 +38,7 @@ import NotFound from "../NotFound.js";
 import MemberUserPage from "../view/info/MemberUserPage.js";
 import AllProductUnActive from "../view/Product/AllProductUnActive.js";
 import SearchProduct from "../view/Product/SearchProduct.js";
+import CategoryUnactive from "../view/Category/CategoryUnactive.js";
 
 
 const AppContent = () => {
@@ -51,6 +52,7 @@ const AppContent = () => {
 
           {/* category */}
           <Route path="/category" element={<Category />} />
+          <Route path="/category-unactive" element={<CategoryUnactive />} />
           <Route path="/category/add" element={<AddCategory />} />
           <Route path="/category/edit/:id" element={<EditCategory />} />
 

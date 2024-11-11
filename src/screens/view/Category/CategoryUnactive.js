@@ -14,10 +14,8 @@ import "./Category.css";
 import DeleteModal from "../../../Component/DeleteModal";
 import API_BASE_URL from "../../../API/config";
 import axios from "axios";
-import ActiveModal from "../../../Component/ActiveModal";
-import ActiveModalCategory from "../../../Component/ActiveModalCategory";
 
-const Category = () => {
+const CategoryUnactive = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]); // Khởi tạo state cho danh mục
   const [loading, setLoading] = useState(true); // Trạng thái loading
@@ -27,9 +25,9 @@ const Category = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/category`);
+      const response = await fetch(`${API_BASE_URL}/api/v1/category/unactive`);
       if (!response.ok) {
-        throw new Error("Không thể lấy dữ liệu danh mục");
+        throw new Error("Không thể lấy dữ liệu danh mục. api đang lỗi chưa hoàn thiện");
       }
       const data = await response.json();
       setCategories(data);
@@ -56,12 +54,10 @@ const Category = () => {
       navigate("/login");
       return;
     }
-  
     if (selectedCategoryId) {
       try {
-        const response = await axios.put(
-          `${API_BASE_URL}/api/v1/category/${selectedCategoryId}`, // Đường dẫn API PUT
-          { isActive: false }, // Cập nhật trạng thái isActive thành false
+        const response = await axios.delete(
+          `${API_BASE_URL}/api/v1/category/${selectedCategoryId}`, //////////thay doi
           {
             headers: {
               Authorization: `Bearer ${token}`, // Thêm token vào header
@@ -70,18 +66,17 @@ const Category = () => {
         );
         console.log(response); 
         if (response.data.success === false) {
-          console.log(response.data.message); // Hiển thị thông báo lỗi nếu không thành công
+          console.log(response.data.message); // Hiển thị thông báo lỗi
         } else {
-          await fetchCategories(); // Nếu cập nhật thành công, tải lại danh mục
+          await fetchCategories(); // Nếu xóa thành công, tải lại danh mục
         }
       } catch (error) {
-        console.error("Có lỗi xảy ra khi cập nhật trạng thái danh mục.", error.response ? error.response.data : error);
+        console.error("Có lỗi xảy ra khi xóa danh mục.");
       } finally {
-        setVisible(false); // Đóng modal
+        setVisible(false);
       }
     }
   };
-  
 
   if (loading) {
     return (
@@ -135,7 +130,7 @@ const Category = () => {
                     className="mx-2"
                     onClick={() => handleDeleteClick(category._id)}
                   >
-                    <i className="bi bi-eye-slash"></i>
+                    <i className="bi bi-trash"></i>
                   </CButton>
                   <CButton
                     color="primary"
@@ -151,7 +146,7 @@ const Category = () => {
         ))}
       </CRow>
 
-      <ActiveModalCategory
+      <DeleteModal
         visible={visible}
         onClose={() => setVisible(false)}
         onConfirm={handleConfirmDelete}
@@ -160,4 +155,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryUnactive;
