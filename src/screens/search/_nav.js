@@ -70,7 +70,7 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: "Danh mục đã ẩn",
+        name: "Danh mục dừng hoạt động",
         to: "/category-unactive",
       },
       {
@@ -85,7 +85,7 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: "Sản phẩm ẩn",
+        name: "Sản phẩm dừng hoạt động",
         to: "/allproducts_unActive",
       },
       {

@@ -25,7 +25,7 @@ const CategoryUnactive = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/category/unactive`);
+      const response = await fetch(`${API_BASE_URL}/api/v1/category/un-active`);
       if (!response.ok) {
         throw new Error("Không thể lấy dữ liệu danh mục. api đang lỗi chưa hoàn thiện");
       }
