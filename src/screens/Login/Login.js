@@ -15,6 +15,11 @@ const Login = () => {
       const response = await axios.post(`${API_BASE_URL}/api/v1/users/login`, {
         email,
         password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json", // Xác định kiểu dữ liệu là JSON
+        },
       });
 
       const { token, userId } = response.data; // Giả sử API trả về cả token và _id của user

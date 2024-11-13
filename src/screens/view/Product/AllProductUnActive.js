@@ -51,41 +51,12 @@ const AllProductUnActive = () => {
   };
 
 
-  //xóa sản phẩm
-  const handleDeleteClick = (id) => {
-    setSelectedProductId(id);
-    setVisible(true);
-  };
-
   const token = localStorage.getItem("authToken");
   if (!token) {
     toast.error("Bạn cần đăng nhập để thêm danh mục!");
     navigate("/login");
     return;
   }
-
-  const handleDeleteConfirm = async () => {
-    try {
-      await axios.delete(
-        `${API_BASE_URL}/api/v1/products/${selectedProductId}`,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setProducts(
-        products.filter((product) => product._id !== selectedProductId)
-      );
-      setVisible(false);
-      fetchProducts();
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-      setVisible(false);
-    }
-  };
 
   //bỏ ẩn sản phẩm
   const handleActieve = (id) => {
@@ -165,13 +136,6 @@ const AllProductUnActive = () => {
                 </CCardText>
                 <div className="d-flex justify-content-end">
                   <CButton
-                    color="danger"
-                    className="mx-1"
-                    onClick={() => handleDeleteClick(product._id)}
-                  >
-                    <i style={{ color: "white" }} className="bi bi-trash"></i>
-                  </CButton>
-                  <CButton
                     color="info"
                     className="mx-1"
                     onClick={() => handleActieve(product._id)}
@@ -201,12 +165,6 @@ const AllProductUnActive = () => {
           </CCol>
         ))}
       </CRow>
-
-      <DeleteModal
-        visible={visible}
-        onClose={() => setVisible(false)}
-        onConfirm={handleDeleteConfirm}
-      />
 
       <UnActiveModal
         visible={visible}

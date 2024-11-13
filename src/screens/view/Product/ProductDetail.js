@@ -50,27 +50,27 @@ const ProductDetail = () => {
   const navigate = useNavigate();
 
   //lấy chi tiết sản phẩm (giá và size)
+
+  const fetchProductAndAttributes = async () => {
+    try {
+      const productResponse = await axios.get(
+        `${API_BASE_URL}/api/v1/products/${productId}`
+      );
+      setProduct(productResponse.data);
+
+      const attributeResponse = await axios.get(
+        `${API_BASE_URL}/api/v1/attributes/by-product/${productId}`
+      );
+      setAttributes(attributeResponse.data.attributes);
+      setLoading(false);
+    } catch (error) {
+      console.error("Lỗi khi tải chi tiết sản phẩm:", error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchProductAndAttributes = async () => {
-      try {
-        const productResponse = await axios.get(
-          `${API_BASE_URL}/api/v1/products/${productId}`
-        );
-        setProduct(productResponse.data);
-
-        const attributeResponse = await axios.get(
-          `${API_BASE_URL}/api/v1/attributes/by-product/${productId}`
-        );
-        setAttributes(attributeResponse.data.attributes);
-        setLoading(false);
-      } catch (error) {
-        console.error("Lỗi khi tải chi tiết sản phẩm:", error);
-        setLoading(false);
-      }
-    };
-
     fetchProductAndAttributes();
-  }, [productId, attributes]);
+  }, []);
 
   // hàm chỉnh sửa giá và size
   const handleEditClick = (attr) => {
@@ -120,6 +120,7 @@ const ProductDetail = () => {
       // Ngừng chế độ chỉnh sửa
       setEditingAttribute(null);
       //modal
+      fetchProductAndAttributes();
       setIsUpdateSuccessVisible(true);
     } catch (error) {
       console.error(
@@ -166,10 +167,11 @@ const ProductDetail = () => {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/api/v1/attributes/add/multiple`, // Đường dẫn API
+        `${API_BASE_URL}/api/v1/attributes/add/single`, // Đường dẫn API
         newAttribute,
         {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`, // Gửi token trong header
           },
         }
@@ -182,6 +184,7 @@ const ProductDetail = () => {
       setAddingNew(false);
       setNewSize("S");
       setNewPrice("");
+      fetchProductAndAttributes();
     } catch (error) {
       console.error(
         "Lỗi khi thêm thuộc tính mới:",
@@ -222,6 +225,7 @@ const ProductDetail = () => {
       );
 
       setIsDeleteSuccessVisible(true);
+      fetchProductAndAttributes();
     } catch (error) {
       console.error(
         "Lỗi khi xóa thuộc tính:",
@@ -296,13 +300,15 @@ const ProductDetail = () => {
                               { label: "S", value: "S" },
                               { label: "M", value: "M" },
                               { label: "L", value: "L" },
+                              { label: "Cơm thêm", value: "Cơm thêm" },
+                              { label: "Gà thêm", value: "Gà thêm" },
                             ]}
                           />
                         ) : (
                           attr.size
                         )}
                       </CTableDataCell>
-                      <CTableDataCell >
+                      <CTableDataCell>
                         {editingAttribute === attr._id ? (
                           <CFormInput
                             id={`price-${attr._id}`}
@@ -370,6 +376,8 @@ const ProductDetail = () => {
                             { label: "S", value: "S" },
                             { label: "M", value: "M" },
                             { label: "L", value: "L" },
+                            { label: "Cơm thêm", value: "Cơm thêm" },
+                            { label: "Gà thêm", value: "Gà thêm" },
                           ]}
                         />
                       </CTableDataCell>
