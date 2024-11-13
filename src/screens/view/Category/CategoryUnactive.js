@@ -14,6 +14,8 @@ import "./Category.css";
 import DeleteModal from "../../../Component/DeleteModal";
 import API_BASE_URL from "../../../API/config";
 import axios from "axios";
+import ActiveModal from "../../../Component/ActiveModal";
+import UnActiveModal from "../../../Component/UnActiveModal";
 
 const CategoryUnactive = () => {
   const navigate = useNavigate();
@@ -56,8 +58,9 @@ const CategoryUnactive = () => {
     }
     if (selectedCategoryId) {
       try {
-        const response = await axios.delete(
-          `${API_BASE_URL}/api/v1/category/${selectedCategoryId}`, //////////thay doi
+        const response = await axios.put(
+          `${API_BASE_URL}/api/v1/category/${selectedCategoryId}`,
+          { isActive: true }, 
           {
             headers: {
               Authorization: `Bearer ${token}`, // Thêm token vào header
@@ -68,15 +71,16 @@ const CategoryUnactive = () => {
         if (response.data.success === false) {
           console.log(response.data.message); // Hiển thị thông báo lỗi
         } else {
-          await fetchCategories(); // Nếu xóa thành công, tải lại danh mục
+          await fetchCategories(); // Nếu cập nhật thành công, tải lại danh mục
         }
       } catch (error) {
-        console.error("Có lỗi xảy ra khi xóa danh mục.");
+        console.error("Có lỗi xảy ra khi cập nhật danh mục.");
       } finally {
         setVisible(false);
       }
     }
   };
+
 
   if (loading) {
     return (
@@ -126,11 +130,11 @@ const CategoryUnactive = () => {
                 <CCardTitle>{category.name}</CCardTitle>
                 <div className="d-flex justify-content-end">
                   <CButton
-                    color="danger"
+                   color="info"
                     className="mx-2"
                     onClick={() => handleDeleteClick(category._id)}
                   >
-                    <i className="bi bi-trash"></i>
+                     <i style={{ color: "white" }} className="bi-eye-slash"></i>
                   </CButton>
                   <CButton
                     color="primary"
@@ -146,7 +150,7 @@ const CategoryUnactive = () => {
         ))}
       </CRow>
 
-      <DeleteModal
+      <UnActiveModal
         visible={visible}
         onClose={() => setVisible(false)}
         onConfirm={handleConfirmDelete}
