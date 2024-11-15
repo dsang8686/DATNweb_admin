@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { CButton, CCard, CCol, CContainer, CRow, CSpinner } from "@coreui/react";
+import {
+  CButton,
+  CCard,
+  CCol,
+  CContainer,
+  CRow,
+  CSpinner,
+} from "@coreui/react";
 import API_BASE_URL from "../../../API/config";
 
 const OrderDetail = () => {
@@ -10,7 +17,6 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
- 
 
   const token = localStorage.getItem("authToken");
 
@@ -54,7 +60,6 @@ const OrderDetail = () => {
     }
   }, [order]);
 
-
   if (loading) {
     return (
       <div
@@ -97,7 +102,15 @@ const OrderDetail = () => {
           </span>
         </p>
         <p>
-          Tổng tiền: <strong>{order.totalPrice.toLocaleString('vi-VN')} VND</strong>
+          <p>
+            Tổng tiền:{" "}
+            <strong>
+              {order.totalPrice !== undefined
+                ? order.totalPrice.toLocaleString("vi-VN")
+                : "N/A"}{" "}
+              VND
+            </strong>
+          </p>
         </p>
         {restaurants ? (
           <p>
@@ -127,13 +140,21 @@ const OrderDetail = () => {
                 <strong>Đơn hàng #{index + 1}</strong>
               </p>
               <p>- Số lượng: {item.quantity}</p>
-              <p>- Sản phẩm: {item.drink}</p>
-              <p>- Kích thước và giá:</p>
+              {/* <p>- Nước: {item.drink}</p> */}
+              <p>- Sản phẩm: {item.product.name}</p>
+              <p>- giá: {item.product.price}</p>
+              
+              <p>- Gọi thêm:</p>
               <ul>
-                <li>Kích thước: {item.attribute.size}</li>
-                <li>Giá: {item.attribute.price.toLocaleString('vi-VN')} VND</li>
+                {item.attribute.map((attr, index) => (
+                  <li key={index}>
+                    <strong>Thêm: </strong> {attr.size}
+                    <br />
+                    <strong>Giá:</strong> {attr.price.toLocaleString("vi-VN")}{" "}
+                    VND
+                  </li>
+                ))}
               </ul>
-           
             </CCard>
           </CCol>
         ))}

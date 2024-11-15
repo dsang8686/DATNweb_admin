@@ -262,6 +262,12 @@ label {
   font-weight: 600;
 }
 
+.status-coming {
+  color: rgb(255, 98, 0);
+  font-size: 18px;
+  font-weight: 600;
+}
+
 .status-success {
   color: green;
   font-size: 18px;

@@ -170,6 +170,12 @@ const AllProduct = () => {
                     <CCardText className="truncate">
                       {product.description}
                     </CCardText>
+                    <div className="truncate">
+                      Giá: {product.price} 
+                    </div>
+                    <div className="truncate my-2">
+                      Giá nhập: {product.defaultPrice} 
+                    </div>
                     <div className="d-flex justify-content-end">
                       <CButton
                         color="danger"

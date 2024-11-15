@@ -76,7 +76,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
   };
 
   const handleEditClick = (orderId, currentStatus) => {
-    if (currentStatus === "Pending") {
+    if (currentStatus === "Pending" || currentStatus === "Coming") {
       setEditingOrderId(orderId);
       setNewStatus(currentStatus);
     }
@@ -196,6 +196,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
                       className={`status-${order.status.toLowerCase()}`}
                     >
                       <option value="Pending">Pending</option>
+                      <option value="Coming">Coming</option>
                       <option value="Success">Success</option>
                       <option value="Failed">Failed</option>
                     </select>
@@ -224,7 +225,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
                       <i className="bi bi-x-square" />
                     </CButton>
                   ) : (
-                    order.status === "Pending" && (
+                    (order.status === "Pending" || order.status === "Coming") && (
                       <CButton
                         color="primary"
                         className="mx-2"

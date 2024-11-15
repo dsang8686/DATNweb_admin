@@ -36,6 +36,8 @@ const ProductDetail = () => {
   const [addingNew, setAddingNew] = useState(false);
   const [newSize, setNewSize] = useState("S");
   const [newPrice, setNewPrice] = useState("");
+  const [newdefaultPrice, setNewdefaultPrice] = useState("");
+  const [newImage, setNewImage] = useState(null);
 
   //vô hiệu hóa nút
   const [isAdding, setIsAdding] = useState(false);
@@ -77,7 +79,13 @@ const ProductDetail = () => {
     setEditingAttribute(attr._id);
   };
   // hàm chỉnh sửa giá và size
-  const handleUpdateAttribute = async (attrId, size, price) => {
+  const handleUpdateAttribute = async (
+    attrId,
+    size,
+    price,
+    defaultPrice,
+    image
+  ) => {
     const token = localStorage.getItem("authToken"); // Lấy token từ local storage
     if (!token) {
       toast.error("Bạn cần đăng nhập để cập nhật thuộc tính!");
@@ -91,29 +99,49 @@ const ProductDetail = () => {
       return;
     }
 
-    const updatedAttribute = {
-      size: size, // Kích cỡ mới
-      price: Number(price), // Giá mới
-    };
+    if (defaultPrice <= 0 || isNaN(defaultPrice)) {
+      setIsErrorVisible(true);
+      setErrorMessage(
+        "Lỗi giá sản phẩm thị trường không được nhỏ hơn hoặc bằng 0"
+      );
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("size", size); // Kích cỡ mới
+    formData.append("price", price); // Giá mới
+    formData.append("defaultPrice", defaultPrice); // Giá mặc định mới
+    if (image) {
+      formData.append("image", image); // Chỉ thêm file ảnh nếu có
+    }
 
     try {
       const response = await axios.put(
         `${API_BASE_URL}/api/v1/attributes/${attrId}`,
-        updatedAttribute,
+        formData,
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`, // Gửi token trong header
           },
         }
       );
 
-      console.log("Cập nhật thuộc tính thành công:", response.data);
+      console.log("Cập nhật thuộc tính thành công:", price);
       toast.success("Cập nhật thuộc tính thành công!");
 
       // Cập nhật lại danh sách attributes
       setAttributes((prevAttributes) =>
         prevAttributes.map((attr) =>
-          attr._id === attrId ? { ...attr, ...updatedAttribute } : attr
+          attr._id === attrId
+            ? {
+                ...attr,
+                size,
+                price: price,
+                defaultPrice: defaultPrice,
+                image: response.data.image || attr.image, // Dùng ảnh từ API nếu có
+              }
+            : attr
         )
       );
 
@@ -134,8 +162,12 @@ const ProductDetail = () => {
   const handleSaveClick = (attrId) => {
     const size = document.querySelector(`#size-${attrId}`).value; // Lấy kích cỡ từ input
     const price = document.querySelector(`#price-${attrId}`).value; // Lấy giá từ input
-
-    handleUpdateAttribute(attrId, size, price);
+    const defaultPrice = document.querySelector(
+      `#defaultPrice-${attrId}`
+    ).value; // Lấy giá từ input
+    const imageInput = document.querySelector(`#image-${attrId}`); // Lấy input file
+    const image = imageInput.files[0];
+    handleUpdateAttribute(attrId, size, price, defaultPrice, image);
   };
 
   // Hàm thêm thuộc tính mới
@@ -154,24 +186,30 @@ const ProductDetail = () => {
       setIsAdding(false);
       return;
     }
+    if (newdefaultPrice <= 0 || isNaN(newdefaultPrice)) {
+      setIsErrorVisible(true);
+      setErrorMessage("Lỗi giá nhập không được nhỏ hơn hoặc bằng 0");
+      setIsAdding(false);
+      return;
+    }
 
-    const newAttribute = {
-      productId: productId, // Sử dụng productId từ state
-      attributes: [
-        {
-          size: newSize,
-          price: Number(newPrice), // Chuyển đổi giá thành số
-        },
-      ],
-    };
+    const formData = new FormData();
+    formData.append("productId", productId); // Thêm productId
+    formData.append("size", newSize); // Thêm kích cỡ
+    formData.append("isActive", true); // Thêm kích cỡ
+    formData.append("price", Number(newPrice)); // Thêm giá
+    formData.append("defaultPrice", Number(newdefaultPrice)); // Thêm giá mặc định
+    if (newImage) {
+      formData.append("image", newImage); // Thêm hình ảnh nếu có
+    }
 
     try {
       const response = await axios.post(
         `${API_BASE_URL}/api/v1/attributes/add/single`, // Đường dẫn API
-        newAttribute,
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`, // Gửi token trong header
           },
         }
@@ -184,6 +222,8 @@ const ProductDetail = () => {
       setAddingNew(false);
       setNewSize("S");
       setNewPrice("");
+      setNewdefaultPrice("");
+      setNewImage(null);
       fetchProductAndAttributes();
     } catch (error) {
       console.error(
@@ -204,28 +244,29 @@ const ProductDetail = () => {
       navigate("/login");
       return; // Ngừng nếu không có token
     }
-
+  
     try {
+      // Tạo đối tượng FormData
+      const formData = new FormData();
+      formData.append("isActive", false); // Thêm isActive vào FormData
+  
       // Gửi yêu cầu cập nhật isActive thành false
-      await axios.put(
-        `${API_BASE_URL}/api/v1/attributes/${attrId}`,
-        { isActive: false },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Gửi token trong header
-          },
-        }
-      );
-
+      await axios.put(`${API_BASE_URL}/api/v1/attributes/${attrId}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Gửi token trong header
+          "Content-Type": "multipart/form-data", // Đặt kiểu Content-Type
+        },
+      });
+  
       // Cập nhật lại danh sách attributes
       setAttributes((prevAttributes) =>
         prevAttributes.map((attr) =>
           attr._id === attrId ? { ...attr, isActive: false } : attr
         )
       );
-
+  
       setIsDeleteSuccessVisible(true);
-      fetchProductAndAttributes();
+      fetchProductAndAttributes(); // Lấy lại danh sách sau khi cập nhật
     } catch (error) {
       console.error(
         "Lỗi khi xóa thuộc tính:",
@@ -234,6 +275,7 @@ const ProductDetail = () => {
       toast.error("Lỗi khi xóa thuộc tính!");
     }
   };
+  
 
   const toggleAddNew = () => {
     setAddingNew(!addingNew);
@@ -285,13 +327,31 @@ const ProductDetail = () => {
 
           <CCard className="mt-3 mb-5">
             <CCardBody>
-              <CCardTitle>Kích cỡ và giá</CCardTitle>
+              <CCardTitle>Chọn thêm</CCardTitle>
               <CTable>
                 <CTableBody>
                   {/* edit và hiện thị */}
                   {attributes.map((attr) => (
                     <CTableRow key={attr._id}>
-                      <CTableDataCell>
+                      <CTableDataCell style={{width: "18%"}}>
+                        {editingAttribute === attr._id ? (
+                          <CFormInput
+                            id={`image-${attr._id}`}
+                            type="file"
+                            style={{ color: "transparent", width: 96 }}
+                            // required
+                            // onChange={handleImageChange}
+                          />
+                        ) : (
+                          <img
+                            src={attr.image}
+                            alt={attr.__v}
+                            style={{ height: 45,objectFit: "cover", 
+                              borderRadius: 4,  }}
+                          />
+                        )}
+                      </CTableDataCell>
+                      <CTableDataCell style={{width: "20%"}}>
                         {editingAttribute === attr._id ? (
                           <CFormSelect
                             id={`size-${attr._id}`}
@@ -308,7 +368,7 @@ const ProductDetail = () => {
                           attr.size
                         )}
                       </CTableDataCell>
-                      <CTableDataCell>
+                      <CTableDataCell style={{width: "20%"}}>
                         {editingAttribute === attr._id ? (
                           <CFormInput
                             id={`price-${attr._id}`}
@@ -325,7 +385,24 @@ const ProductDetail = () => {
                         )}
                       </CTableDataCell>
 
-                      <CTableDataCell className=" text-end">
+                      <CTableDataCell style={{width: "20%"}}>
+                        {editingAttribute === attr._id ? (
+                          <CFormInput
+                            id={`defaultPrice-${attr._id}`}
+                            type="number"
+                            defaultValue={attr.defaultPrice}
+                          />
+                        ) : (
+                          <span className="mt-5">
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(attr.defaultPrice)}
+                          </span>
+                        )}
+                      </CTableDataCell>
+
+                      <CTableDataCell className=" text-end" style={{width: "20%"}}>
                         {editingAttribute === attr._id ? (
                           <div>
                             <CButton
@@ -336,7 +413,7 @@ const ProductDetail = () => {
                             </CButton>
 
                             <CButton
-                              className="ms-4"
+                              className="ms-2"
                               color="success"
                               onClick={() => handleSaveClick(attr._id)}
                             >
@@ -353,7 +430,7 @@ const ProductDetail = () => {
                             </CButton>
 
                             <CButton
-                              className="ms-4"
+                              className="ms-2"
                               color="primary"
                               onClick={() => handleEditClick(attr)}
                             >
@@ -368,7 +445,14 @@ const ProductDetail = () => {
                   {/* thêm mới */}
                   {addingNew && (
                     <CTableRow>
-                      <CTableDataCell>
+                      <CTableDataCell style={{width: "20%"}}>
+                        <CFormInput
+                          type="file"
+                          onChange={(e) => setNewImage(e.target.files[0])}
+                          style={{ color: "transparent",  }}
+                        />
+                      </CTableDataCell>
+                      <CTableDataCell style={{width: "20%"}}>
                         <CFormSelect
                           value={newSize}
                           onChange={(e) => setNewSize(e.target.value)}
@@ -381,14 +465,25 @@ const ProductDetail = () => {
                           ]}
                         />
                       </CTableDataCell>
-                      <CTableDataCell>
+                      <CTableDataCell style={{width: "20%"}}>
                         <CFormInput
                           type="number"
                           value={newPrice}
                           onChange={(e) => setNewPrice(e.target.value)}
+                          placeholder="Giá bán"
                         />
                       </CTableDataCell>
-                      <CTableDataCell className="text-end">
+                      <CTableDataCell style={{width: "20%"}}>
+                        <CFormInput
+                          type="number"
+                          value={newdefaultPrice}
+                          onChange={(e) => setNewdefaultPrice(e.target.value)}
+                          placeholder="Giá nhập"
+                          
+                        />
+                      </CTableDataCell>
+                      
+                      <CTableDataCell className="text-end" style={{width: "20%"}}>
                         <CButton
                           color="danger"
                           onClick={() => setAddingNew(false)} // Thoát chế độ thêm khi nhấn "Bỏ"
@@ -396,13 +491,13 @@ const ProductDetail = () => {
                           <i className="bi bi-x-square" />
                         </CButton>
                         <CButton
-                          className="ms-4"
+                          className="ms-2"
                           color="success"
                           onClick={handleSaveNewAttribute} // Lưu dữ liệu khi nhấn "Lưu"
                           style={{ color: "white" }}
                           disabled={isAdding}
                         >
-                          <i class="bi bi-check2-square"></i>
+                          <i className="bi bi-check2-square"></i>
                         </CButton>
                       </CTableDataCell>
                     </CTableRow>
