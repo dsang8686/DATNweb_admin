@@ -20,6 +20,8 @@ const AddProductNew = () => {
   const [categories, setCategories] = useState([]); // Lưu danh sách danh mục
   const [selectedCategory, setSelectedCategory] = useState("");
   const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [defaultPrice, setDefaultPrice] = useState("");
   const [description, setDescription] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [imageFile, setImageFile] = useState(null); // Lưu trữ file ảnh
@@ -63,7 +65,7 @@ const AddProductNew = () => {
     setError("");
 
     // Kiểm tra xem người dùng đã chọn danh mục và tải ảnh lên chưa
-    if (!selectedCategory || !name || !description || !imageFile) {
+    if (!selectedCategory || !name || !description || !imageFile || !price || !defaultPrice) {
       setError("Vui lòng điền đầy đủ thông tin.");
       setIsSubmitting(false);
       return;
@@ -81,6 +83,8 @@ const AddProductNew = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
+    formData.append("price", price);
+    formData.append("defaultPrice", defaultPrice);
     formData.append("category", selectedCategory);
     formData.append("image", imageFile); // Thêm file ảnh vào formData
 
@@ -143,6 +147,22 @@ const AddProductNew = () => {
           placeholder="Tên sản phẩm"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
+          className="my-4"
+        />
+          <CFormInput
+          type="number"
+          placeholder="Giá"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+          className="my-4"
+        />
+         <CFormInput
+          type="number"
+          placeholder="Giá nhập"
+          value={defaultPrice}
+          onChange={(e) => setDefaultPrice(e.target.value)}
           required
           className="my-4"
         />

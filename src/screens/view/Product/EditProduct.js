@@ -24,6 +24,8 @@ const EditProduct = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const [price, setPrice] = useState("");
+  const [defaultPrice, setDefaultPrice] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -56,6 +58,8 @@ const EditProduct = () => {
           setProduct(response.data);
           setName(response.data.name);
           setDescription(response.data.description);
+          setPrice(response.data.price);
+          setDefaultPrice(response.data.defaultPrice);
           setSelectedCategory(response.data.category._id);
           setImagePreview(response.data.image);
         } else {
@@ -69,7 +73,7 @@ const EditProduct = () => {
     };
 
     fetchProduct();
-  }, [id]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,6 +90,8 @@ const EditProduct = () => {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("category", selectedCategory);
+    formData.append("price", price);
+    formData.append("defaultPrice", defaultPrice);
     if (imageFile) formData.append("image", imageFile);
 
     try {
@@ -153,6 +159,22 @@ const EditProduct = () => {
           placeholder="Tên sản phẩm"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
+          className="my-4"
+        />
+        <CFormInput
+          type="number"
+          placeholder="Giá"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+          className="my-4"
+        />
+         <CFormInput
+          type="number"
+          placeholder="Giá nhập"
+          value={defaultPrice}
+          onChange={(e) => setDefaultPrice(e.target.value)}
           required
           className="my-4"
         />
