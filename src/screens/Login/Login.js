@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Login.css";
 import API_BASE_URL from "../../API/config";
 import { CSpinner } from "@coreui/react";
-
+import { toast, ToastContainer } from 'react-toastify';
 const Login = () => {
   const [email, setEmail] = useState(""); // Trạng thái email
   const [password, setPassword] = useState(""); // Trạng thái password
@@ -25,9 +25,9 @@ const Login = () => {
       const { token, userId } = response.data; // Giả sử API trả về cả token và _id của user
       localStorage.setItem("authToken", token); // Lưu token vào localStorage
       localStorage.setItem("userId", userId); // Lưu _id của user vào localStorage
-
       window.location.href = "/"; // Chuyển hướng về trang chủ
     } catch (error) {
+      toast.error("Lỗi email hoặc mật khẩu không đúng!");
       console.error("Error during login:", error);
       // Bạn có thể thêm thông báo lỗi cho người dùng ở đây
     } finally {
@@ -38,6 +38,7 @@ const Login = () => {
   return (
     <div id="loginContainer">
       <div id="loginContent">
+      <ToastContainer position="top-right" autoClose={3000} />
         <div id="formLogin">
           <img src={require("./../../Img/goood.png")} alt="" />
           <p>Email</p>

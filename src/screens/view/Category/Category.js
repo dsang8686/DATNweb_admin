@@ -16,6 +16,7 @@ import API_BASE_URL from "../../../API/config";
 import axios from "axios";
 import ActiveModal from "../../../Component/ActiveModal";
 import ActiveModalCategory from "../../../Component/ActiveModalCategory";
+import { toast } from 'react-toastify';
 
 const Category = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const Category = () => {
       setCategories(data);
     } catch (error) {
       setError(error.message);
+      toast.error("Lỗi khi tại đanh mục");
     } finally {
       setLoading(false);
     }
@@ -48,7 +50,7 @@ const Category = () => {
     setSelectedCategoryId(id);
     setVisible(true);
   };
-
+  // ẩn 
   const handleConfirmDelete = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -71,10 +73,13 @@ const Category = () => {
         console.log(response); 
         if (response.data.success === false) {
           console.log(response.data.message); // Hiển thị thông báo lỗi nếu không thành công
+          toast.error("Lỗi khi ẩn");
         } else {
+          toast.success("Ẩn danh mục thành công");
           await fetchCategories(); // Nếu cập nhật thành công, tải lại danh mục
         }
       } catch (error) {
+        toast.error("Lỗi khi ẩn");
         console.error("Có lỗi xảy ra khi cập nhật trạng thái danh mục.", error.response ? error.response.data : error);
       } finally {
         setVisible(false); // Đóng modal

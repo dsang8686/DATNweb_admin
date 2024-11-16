@@ -16,6 +16,7 @@ import API_BASE_URL from "../../../API/config";
 import axios from "axios";
 import ActiveModal from "../../../Component/ActiveModal";
 import UnActiveModal from "../../../Component/UnActiveModal";
+import { toast } from 'react-toastify';
 
 const CategoryUnactive = () => {
   const navigate = useNavigate();
@@ -70,10 +71,13 @@ const CategoryUnactive = () => {
         console.log(response); 
         if (response.data.success === false) {
           console.log(response.data.message); // Hiển thị thông báo lỗi
+          toast.error("Lỗi khi ẩn");
         } else {
+          toast.success("Bỏ ẩn danh mục thành công");
           await fetchCategories(); // Nếu cập nhật thành công, tải lại danh mục
         }
       } catch (error) {
+        toast.error("Lỗi khi ẩn");
         console.error("Có lỗi xảy ra khi cập nhật danh mục.");
       } finally {
         setVisible(false);

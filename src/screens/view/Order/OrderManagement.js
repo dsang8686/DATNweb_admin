@@ -11,7 +11,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_BASE_URL from "../../../API/config";
-
+import { toast } from "react-toastify";
 const OrderManagement = ({ onDeleteOrder }) => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -88,7 +88,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
 
   const token = localStorage.getItem("authToken");
   if (!token) {
-    console.error("Bạn cần đăng nhập để thêm danh mục!");
+    toast.error("Bạn cần đăng nhập để thêm danh mục!");
     navigate("/login");
     return;
   }
@@ -105,8 +105,10 @@ const OrderManagement = ({ onDeleteOrder }) => {
         }
       );
       fetchOrders();
+      toast.success("Cập nhật trạng thái đơn hàng thành công!");
       setEditingOrderId(null);
     } catch (error) {
+      toast.error("Lỗi khi cập nhật trạng thái đơn hàng!");
       console.error("Lỗi khi cập nhật trạng thái đơn hàng:", error);
     }
   };
