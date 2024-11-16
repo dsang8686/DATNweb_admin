@@ -11,6 +11,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Logout from "./screens/Login/Logout";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const isAuthenticated = localStorage.getItem("authToken") !== null; // Kiểm tra xem người dùng đã đăng nhập hay chưa

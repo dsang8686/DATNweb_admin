@@ -13,7 +13,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import API_BASE_URL from "../../../API/config";
-
 function Info() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
@@ -49,6 +48,7 @@ function Info() {
         setAdmin(data.isAdmin);
         setImage(data.image);
         setPreviewImage(data.image);
+        toast.success("Chỉnh sửa thành công");
       } catch (error) {
         console.error("Lỗi khi lấy thông tin admin:", error);
         toast.error("Không thể lấy thông tin admin.");

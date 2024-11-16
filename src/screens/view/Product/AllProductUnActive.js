@@ -84,8 +84,10 @@ const AllProductUnActive = () => {
         )
       );
       setVisible(false);
+      toast.success("Bỏ ẩn sản phẩm thành công");
       fetchProducts();
     } catch (error) {
+      toast.error("Lỗi khi ẩn");
       console.error("Lỗi khi chuyển trạng thái sản phẩm:", error);
       setVisible(false);
     }

@@ -12,6 +12,7 @@ import "@coreui/coreui/dist/css/coreui.min.css";
 import "./../Layout/style.css";
 import AppContent from "../search/AppContent";
 import BackToTop from "../../Component/BackToTop";
+import { toast, ToastContainer } from 'react-toastify';
 
 const DefaultLayout = () => {
   return (
@@ -22,6 +23,7 @@ const DefaultLayout = () => {
         zIndex: "0", // Đặt zIndex hợp lý
       }}
     >
+      <ToastContainer position="top-right" autoClose={3000} />
       <AppSidebar />
       <div className="wrapper d-flex flex-column min-vh-100">
         <AppHeader className="header" /> {/* Header */}

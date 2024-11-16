@@ -96,8 +96,10 @@ const AllProduct = () => {
         )
       ); // Cập nhật danh sách sản phẩm sau khi chuyển trạng thái
       setVisible(false); // Đóng modal
+      toast.success("Ẩn sản phẩm thành công");
       fetchProducts()
     } catch (error) {
+      toast.error("Lỗi khi ẩn");
       console.error("Lỗi khi chuyển trạng thái sản phẩm:", error);
       setVisible(false); // Đóng modal ngay cả khi lỗi
     }

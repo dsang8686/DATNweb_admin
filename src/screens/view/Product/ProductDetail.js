@@ -244,12 +244,12 @@ const ProductDetail = () => {
       navigate("/login");
       return; // Ngừng nếu không có token
     }
-  
+
     try {
       // Tạo đối tượng FormData
       const formData = new FormData();
       formData.append("isActive", false); // Thêm isActive vào FormData
-  
+
       // Gửi yêu cầu cập nhật isActive thành false
       await axios.put(`${API_BASE_URL}/api/v1/attributes/${attrId}`, formData, {
         headers: {
@@ -257,14 +257,14 @@ const ProductDetail = () => {
           "Content-Type": "multipart/form-data", // Đặt kiểu Content-Type
         },
       });
-  
+
       // Cập nhật lại danh sách attributes
       setAttributes((prevAttributes) =>
         prevAttributes.map((attr) =>
           attr._id === attrId ? { ...attr, isActive: false } : attr
         )
       );
-  
+
       setIsDeleteSuccessVisible(true);
       fetchProductAndAttributes(); // Lấy lại danh sách sau khi cập nhật
     } catch (error) {
@@ -275,7 +275,6 @@ const ProductDetail = () => {
       toast.error("Lỗi khi xóa thuộc tính!");
     }
   };
-  
 
   const toggleAddNew = () => {
     setAddingNew(!addingNew);
@@ -330,50 +329,46 @@ const ProductDetail = () => {
               <CCardTitle>Chọn thêm</CCardTitle>
               <CTable>
                 <CTableBody>
-                  {/* edit và hiện thị */}
+                  {/* Hiển thị và chỉnh sửa */}
                   {attributes.map((attr) => (
                     <CTableRow key={attr._id}>
-                      <CTableDataCell style={{width: "18%"}}>
+                      <CTableDataCell style={{ width: "18%" }}>
                         {editingAttribute === attr._id ? (
                           <CFormInput
                             id={`image-${attr._id}`}
                             type="file"
                             style={{ color: "transparent", width: 96 }}
-                            // required
-                            // onChange={handleImageChange}
                           />
                         ) : (
                           <img
                             src={attr.image}
                             alt={attr.__v}
-                            style={{ height: 45,objectFit: "cover", 
-                              borderRadius: 4,  }}
+                            style={{
+                              height: 45,
+                              objectFit: "cover",
+                              borderRadius: 4,
+                            }}
                           />
                         )}
                       </CTableDataCell>
-                      <CTableDataCell style={{width: "20%"}}>
+                      <CTableDataCell style={{ width: "20%" }}>
                         {editingAttribute === attr._id ? (
-                          <CFormSelect
+                          <CFormInput
                             id={`size-${attr._id}`}
                             defaultValue={attr.size}
-                            options={[
-                              { label: "S", value: "S" },
-                              { label: "M", value: "M" },
-                              { label: "L", value: "L" },
-                              { label: "Cơm thêm", value: "Cơm thêm" },
-                              { label: "Gà thêm", value: "Gà thêm" },
-                            ]}
+                            placeholder="Tên topping"
                           />
                         ) : (
                           attr.size
                         )}
                       </CTableDataCell>
-                      <CTableDataCell style={{width: "20%"}}>
+                      <CTableDataCell style={{ width: "20%" }}>
                         {editingAttribute === attr._id ? (
                           <CFormInput
                             id={`price-${attr._id}`}
                             type="number"
                             defaultValue={attr.price}
+                            placeholder="Nhập giá bán"
                           />
                         ) : (
                           <span className="mt-5">
@@ -384,13 +379,13 @@ const ProductDetail = () => {
                           </span>
                         )}
                       </CTableDataCell>
-
-                      <CTableDataCell style={{width: "20%"}}>
+                      <CTableDataCell style={{ width: "20%" }}>
                         {editingAttribute === attr._id ? (
                           <CFormInput
                             id={`defaultPrice-${attr._id}`}
                             type="number"
                             defaultValue={attr.defaultPrice}
+                            placeholder="Nhập giá nhập"
                           />
                         ) : (
                           <span className="mt-5">
@@ -401,17 +396,18 @@ const ProductDetail = () => {
                           </span>
                         )}
                       </CTableDataCell>
-
-                      <CTableDataCell className=" text-end" style={{width: "20%"}}>
+                      <CTableDataCell
+                        className=" text-end"
+                        style={{ width: "20%" }}
+                      >
                         {editingAttribute === attr._id ? (
                           <div>
                             <CButton
                               color="danger"
                               onClick={() => setEditingAttribute(null)}
                             >
-                              <i class="bi bi-x-lg"></i>
+                              <i className="bi bi-x-lg"></i>
                             </CButton>
-
                             <CButton
                               className="ms-2"
                               color="success"
@@ -428,7 +424,6 @@ const ProductDetail = () => {
                             >
                               <i className="bi-trash"></i>
                             </CButton>
-
                             <CButton
                               className="ms-2"
                               color="primary"
@@ -442,30 +437,24 @@ const ProductDetail = () => {
                     </CTableRow>
                   ))}
 
-                  {/* thêm mới */}
+                  {/* Thêm mới */}
                   {addingNew && (
                     <CTableRow>
-                      <CTableDataCell style={{width: "20%"}}>
+                      <CTableDataCell style={{ width: "20%" }}>
                         <CFormInput
                           type="file"
                           onChange={(e) => setNewImage(e.target.files[0])}
-                          style={{ color: "transparent",  }}
+                          style={{ color: "transparent" }}
                         />
                       </CTableDataCell>
-                      <CTableDataCell style={{width: "20%"}}>
-                        <CFormSelect
+                      <CTableDataCell style={{ width: "20%" }}>
+                        <CFormInput
                           value={newSize}
                           onChange={(e) => setNewSize(e.target.value)}
-                          options={[
-                            { label: "S", value: "S" },
-                            { label: "M", value: "M" },
-                            { label: "L", value: "L" },
-                            { label: "Cơm thêm", value: "Cơm thêm" },
-                            { label: "Gà thêm", value: "Gà thêm" },
-                          ]}
+                          placeholder="Nhập kích cỡ"
                         />
                       </CTableDataCell>
-                      <CTableDataCell style={{width: "20%"}}>
+                      <CTableDataCell style={{ width: "20%" }}>
                         <CFormInput
                           type="number"
                           value={newPrice}
@@ -473,27 +462,28 @@ const ProductDetail = () => {
                           placeholder="Giá bán"
                         />
                       </CTableDataCell>
-                      <CTableDataCell style={{width: "20%"}}>
+                      <CTableDataCell style={{ width: "20%" }}>
                         <CFormInput
                           type="number"
                           value={newdefaultPrice}
                           onChange={(e) => setNewdefaultPrice(e.target.value)}
                           placeholder="Giá nhập"
-                          
                         />
                       </CTableDataCell>
-                      
-                      <CTableDataCell className="text-end" style={{width: "20%"}}>
+                      <CTableDataCell
+                        className="text-end"
+                        style={{ width: "20%" }}
+                      >
                         <CButton
                           color="danger"
-                          onClick={() => setAddingNew(false)} // Thoát chế độ thêm khi nhấn "Bỏ"
+                          onClick={() => setAddingNew(false)}
                         >
                           <i className="bi bi-x-square" />
                         </CButton>
                         <CButton
                           className="ms-2"
                           color="success"
-                          onClick={handleSaveNewAttribute} // Lưu dữ liệu khi nhấn "Lưu"
+                          onClick={handleSaveNewAttribute}
                           style={{ color: "white" }}
                           disabled={isAdding}
                         >
