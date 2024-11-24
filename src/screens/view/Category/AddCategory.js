@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CButton, CCol, CForm, CFormInput, CSpinner } from "@coreui/react";
+import { CButton, CCol, CForm, CFormInput, CFormLabel, CSpinner } from "@coreui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_BASE_URL from '../../../API/config';
@@ -70,18 +70,22 @@ const AddCategory = () => {
       </CCol>
 
       <CForm onSubmit={handleSubmit}>
+      <CFormLabel htmlFor="restaurantName">Tên danh mục</CFormLabel>
+
         <CFormInput
           type="text"
           placeholder="Tên danh mục"
           required
-          className="my-4"
+          className="mb-4"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+        <CFormLabel htmlFor="restaurantName">Chọn ảnh</CFormLabel>
+
         <CFormInput
           type="file"
           accept="image/*"
-          className="my-4"
+          className="mb-4"
           required
           onChange={handleImageChange}
         />

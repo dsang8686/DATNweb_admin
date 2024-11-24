@@ -7,6 +7,7 @@ import {
   CFormSelect,
   CCol,
   CSpinner,
+  CFormLabel,
 } from "@coreui/react";
 import BackButton from "../../../Component/BackButton";
 import axios from "axios";
@@ -65,17 +66,24 @@ const AddProductNew = () => {
     setError("");
 
     // Kiểm tra xem người dùng đã chọn danh mục và tải ảnh lên chưa
-    if (!selectedCategory || !name || !description || !imageFile || !price || !defaultPrice) {
+    if (
+      !selectedCategory ||
+      !name ||
+      !description ||
+      !imageFile ||
+      !price ||
+      !defaultPrice
+    ) {
       setError("Vui lòng điền đầy đủ thông tin.");
       setIsSubmitting(false);
       return;
     }
 
     // Kiểm tra xem token có tồn tại không
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (!token) {
-      toast.error('Bạn cần đăng nhập xem!');
-      navigate('/login');
+      toast.error("Bạn cần đăng nhập xem!");
+      navigate("/login");
       return;
     }
 
@@ -90,17 +98,20 @@ const AddProductNew = () => {
 
     try {
       // Gửi yêu cầu POST đến API
-      const response = await axios.post(`${API_BASE_URL}/api/v1/products`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-     
+      const response = await axios.post(
+        `${API_BASE_URL}/api/v1/products`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       if (response.status === 201) {
         setSuccessModalVisible(true); // Hiển thị modal thành công
       }
-      
     } catch (error) {
       console.error("Lỗi khi thêm sản phẩm:", error);
       setError("Đã xảy ra lỗi khi thêm sản phẩm.");
@@ -123,6 +134,8 @@ const AddProductNew = () => {
       <CForm onSubmit={handleSubmit}>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <CCol className="mb-3">
+          <CFormLabel htmlFor="restaurantName">Chọn danh mục</CFormLabel>
+
           <CFormSelect
             aria-label="Chọn danh mục"
             value={selectedCategory}
@@ -142,42 +155,48 @@ const AddProductNew = () => {
           </CFormSelect>
         </CCol>
 
+        <CFormLabel htmlFor="restaurantName">Tên sản phẩm</CFormLabel>
         <CFormInput
           type="text"
           placeholder="Tên sản phẩm"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="my-4"
+          className="mb-4"
         />
-          <CFormInput
+
+        <CFormLabel htmlFor="restaurantName">Giá bán</CFormLabel>
+        <CFormInput
           type="number"
           placeholder="Giá"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           required
-          className="my-4"
+          className="mb-4"
         />
-         <CFormInput
+        <CFormLabel htmlFor="restaurantName">Giá nhập</CFormLabel>
+        <CFormInput
           type="number"
           placeholder="Giá nhập"
           value={defaultPrice}
           onChange={(e) => setDefaultPrice(e.target.value)}
           required
-          className="my-4"
+          className="mb-4"
         />
+        <CFormLabel htmlFor="restaurantName">Mô tả</CFormLabel>
         <CFormTextarea
           placeholder="Mô tả"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="my-4"
+          className="mb-4"
           required
         />
+        <CFormLabel htmlFor="restaurantName">Chọn ảnh</CFormLabel>
         <CFormInput
           type="file"
           accept="image/*"
           onChange={handleImageChange}
-          className="my-4"
+          className="mb-4"
           required
         />
         {imagePreview && (
@@ -191,8 +210,13 @@ const AddProductNew = () => {
           </div>
         )}
 
-        <CButton type="submit" color="primary" className="mt-3" disabled={isSubmitting}>
-          {isSubmitting ?  <CSpinner /> : "Thêm Sản Phẩm"}
+        <CButton
+          type="submit"
+          color="primary"
+          className="mt-3"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? <CSpinner /> : "Thêm Sản Phẩm"}
         </CButton>
       </CForm>
       <SuccessModal visible={successModalVisible} onClose={handleModalClose} />
