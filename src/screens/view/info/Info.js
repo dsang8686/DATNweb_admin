@@ -48,7 +48,6 @@ function Info() {
         setAdmin(data.isAdmin);
         setImage(data.image);
         setPreviewImage(data.image);
-        toast.success("Chỉnh sửa thành công");
       } catch (error) {
         console.error("Lỗi khi lấy thông tin admin:", error);
         toast.error("Không thể lấy thông tin admin.");

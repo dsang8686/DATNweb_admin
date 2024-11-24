@@ -7,6 +7,7 @@ import {
   CFormSelect,
   CCol,
   CSpinner,
+  CFormLabel,
 } from "@coreui/react";
 import BackButton from "../../../Component/BackButton";
 import axios from "axios";
@@ -137,7 +138,7 @@ const EditProduct = () => {
       </CCol>
 
       <CForm onSubmit={handleSubmit}>
-       
+      <CFormLabel htmlFor="restaurantName">Chọn danh mục</CFormLabel>
         <CCol className="mb-3">
           <CFormSelect
             aria-label="Chọn danh mục"
@@ -153,43 +154,48 @@ const EditProduct = () => {
             ))}
           </CFormSelect>
         </CCol>
-
+        <CFormLabel htmlFor="restaurantName">Tên sản phẩm</CFormLabel>
         <CFormInput
           type="text"
           placeholder="Tên sản phẩm"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="my-4"
+          className="mb-3"
         />
+        <div className="mb-3">
+        <CFormLabel htmlFor="restaurantName">Giá bán</CFormLabel>
         <CFormInput
           type="number"
           placeholder="Giá"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           required
-          className="my-4"
         />
+        </div>
+        <CFormLabel htmlFor="restaurantName">Giá nhập</CFormLabel>
          <CFormInput
           type="number"
           placeholder="Giá nhập"
           value={defaultPrice}
           onChange={(e) => setDefaultPrice(e.target.value)}
           required
-          className="my-4"
+          className="mb-4"
         />
+        <CFormLabel htmlFor="restaurantName">Mô tả</CFormLabel>
         <CFormTextarea
           placeholder="Mô tả"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="my-4"
+          className="mb-4"
           required
         />
+        <CFormLabel htmlFor="restaurantName">Chọn ảnh</CFormLabel>
         <CFormInput
           type="file"
           accept="image/*"
           onChange={handleImageChange}
-          className="my-4"
+          className="mb-4"
          
         />
         {imagePreview && (

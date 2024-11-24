@@ -80,7 +80,7 @@ const EditRestaurant = () => {
   return (
     <CContainer>
       <CCol className="d-flex justify-content-between my-3">
-        <h4 className="mb-4">CHỈNH SỬA NHÀ HÀNG</h4>
+        <h4 className="mb-4">CHỈNH SỬA CỬA HÀNG</h4>
         <CButton color="primary" className="mb-3">
           <Link to="/restaurant" style={{ color: "white", textDecoration: "none" }}>
             Danh sách
@@ -90,7 +90,7 @@ const EditRestaurant = () => {
 
       <CForm onSubmit={handleSubmit}>
         <div className="mb-3">
-          <CFormLabel htmlFor="restaurantName">Tên nhà hàng</CFormLabel>
+          <CFormLabel htmlFor="restaurantName">Tên cửa hàng</CFormLabel>
           <CFormInput
             type="text"
             id="restaurantName"

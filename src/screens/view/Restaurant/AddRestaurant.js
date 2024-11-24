@@ -81,7 +81,7 @@ const AddRestaurant = () => {
 
       <CForm>
         <div className="mb-3">
-          <CFormLabel htmlFor="restaurantName">Tên nhà hàng</CFormLabel>
+          <CFormLabel htmlFor="restaurantName">Tên cửa hàng</CFormLabel>
           <CFormInput
             type="text"
             id="restaurantName"
