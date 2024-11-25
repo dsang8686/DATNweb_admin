@@ -10,7 +10,7 @@ import {
   CRow,
   CSpinner,
 } from "@coreui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation  } from "react-router-dom";
 import axios from "axios";
 import API_BASE_URL from "../../../API/config";
 
@@ -18,16 +18,26 @@ const SearchProduct = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
 
 
-  const handleSearch = async () => {
-    if (!searchInput.trim()) return; // Ignore empty search queries
+  useEffect(() => {
+    // Lấy query từ URL
+    const queryParams = new URLSearchParams(location.search);
+    const query = queryParams.get("query");
+    if (query) {
+      setSearchInput(query);
+      handleSearch(query);
+    }
+  }, [location.search]);
 
+  const handleSearch = async (query) => {
+    if (!query.trim()) return; // Bỏ qua nếu input rỗng
     setLoading(true);
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/v1/products/search?input=${searchInput}`
+        `${API_BASE_URL}/api/v1/products/search?input=${query}`
       );
       setSearchResults(response.data.products);
     } catch (error) {
@@ -36,6 +46,7 @@ const SearchProduct = () => {
       setLoading(false);
     }
   };
+
   const [products, setProducts] = useState([]);
   const [visible, setVisible] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
@@ -159,7 +170,7 @@ const SearchProduct = () => {
 
       {/* Search bar */}
       <div className="mx-3" style={{ position: "relative" }}>
-        <CButton onClick={handleSearch} style={{ position: "absolute", top: 0, right: 0 }}>
+        <CButton onClick={() => handleSearch(searchInput)} style={{ position: "absolute", top: 0, right: 0 }}>
           Tìm Kiếm <i className="ms-1 bi bi-search" />
         </CButton>
         <input

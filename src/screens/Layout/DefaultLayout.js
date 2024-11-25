@@ -13,6 +13,7 @@ import "./../Layout/style.css";
 import AppContent from "../search/AppContent";
 import BackToTop from "../../Component/BackToTop";
 import { toast, ToastContainer } from 'react-toastify';
+import '@coreui/coreui/dist/css/coreui.min.css';
 
 const DefaultLayout = () => {
   return (

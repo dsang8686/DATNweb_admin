@@ -39,7 +39,7 @@ function AddInfo() {
     }
     if (!passwordRegex.test(password)) {
       toast.error(
-        "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ số, 1 chữ thường và 1 chữ hoa."
+        "Mật khẩu phải có ít nhất 9 ký tự, bao gồm ít nhất 1 chữ số, 1 chữ thường và 1 chữ hoa."
       );
       return false;
     }
