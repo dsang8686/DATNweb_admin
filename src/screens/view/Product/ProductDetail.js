@@ -34,7 +34,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
 
   const [addingNew, setAddingNew] = useState(false);
-  const [newSize, setNewSize] = useState("S");
+  const [newSize, setNewSize] = useState("");
   const [newPrice, setNewPrice] = useState("");
   const [newdefaultPrice, setNewdefaultPrice] = useState("");
   const [newImage, setNewImage] = useState(null);
@@ -72,7 +72,7 @@ const ProductDetail = () => {
   };
   useEffect(() => {
     fetchProductAndAttributes();
-  }, []);
+  }, [productId]);
 
   // hàm chỉnh sửa giá và size
   const handleEditClick = (attr) => {
@@ -279,7 +279,7 @@ const ProductDetail = () => {
   const toggleAddNew = () => {
     setAddingNew(!addingNew);
     if (addingNew) {
-      setNewSize("S");
+      setNewSize("");
       setNewPrice("");
     }
   };
@@ -318,9 +318,9 @@ const ProductDetail = () => {
         <div className="col-md-8">
           <CCard>
             <CCardBody>
-              <CCardTitle>Danh mục: {product.category.name}</CCardTitle>
-              <CCardTitle>{product.name}</CCardTitle>
-              <CCardText>{product.description}</CCardText>
+              <CCardTitle>Danh mục: {product.category?.name ? product.category?.name : "Đã dừng hoạt động"}</CCardTitle>
+              <CCardTitle>{product?.name}</CCardTitle>
+              <CCardText>{product?.description}</CCardText>
             </CCardBody>
           </CCard>
 
@@ -356,7 +356,7 @@ const ProductDetail = () => {
                           <CFormInput
                             id={`size-${attr._id}`}
                             defaultValue={attr.size}
-                            placeholder="Tên topping"
+                            placeholder="Tên món"
                           />
                         ) : (
                           attr.size
@@ -451,7 +451,7 @@ const ProductDetail = () => {
                         <CFormInput
                           value={newSize}
                           onChange={(e) => setNewSize(e.target.value)}
-                          placeholder="Nhập kích cỡ"
+                          placeholder="Món thêm"
                         />
                       </CTableDataCell>
                       <CTableDataCell style={{ width: "20%" }}>
