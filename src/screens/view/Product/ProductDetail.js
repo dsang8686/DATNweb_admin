@@ -318,9 +318,21 @@ const ProductDetail = () => {
         <div className="col-md-8">
           <CCard>
             <CCardBody>
-              <CCardTitle>Danh mục: {product.category?.name ? product.category?.name : "Đã dừng hoạt động"}</CCardTitle>
+              <CCardTitle>
+                Danh mục:{" "}
+                {product.category?.name
+                  ? product.category?.name
+                  : "Đã dừng hoạt động"}
+              </CCardTitle>
               <CCardTitle>{product?.name}</CCardTitle>
-              <CCardText>{product?.description}</CCardText>
+              <CCardText>
+                {product?.description}
+                <br />
+                giá bán:{" "}
+                <strong>{product?.price.toLocaleString("vi-VN")} đ</strong> | giá
+                nhập:{" "}
+                <strong>{product?.defaultPrice.toLocaleString("vi-VN")} đ</strong>
+              </CCardText>
             </CCardBody>
           </CCard>
 
