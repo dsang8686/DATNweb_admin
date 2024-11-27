@@ -23,12 +23,12 @@ const Login = () => {
       });
       const { token, userId, isAdmin } = response.data; // Giả sử API trả về cả token và _id của user
 
-      // if (!isAdmin) {
-      //   // Kiểm tra quyền admin
-      //   toast.error("Tài khoản của bạn không có quyền admin!");
-      //   setLoading(false);
-      //   return;
-      // }
+      if (!isAdmin) {
+        // Kiểm tra quyền admin
+        toast.error("Tài khoản của bạn không có quyền admin!");
+        setLoading(false);
+        return;
+      }
 
       localStorage.setItem("authToken", token); // Lưu token vào localStorage
       localStorage.setItem("userId", userId); // Lưu _id của user vào localStorage

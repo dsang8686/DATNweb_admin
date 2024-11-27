@@ -106,7 +106,7 @@ const AppHeader = () => {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
-          if (response.data.newOrders > 0) {
+          if (response.data.orderItems > 0) {
             setHasNewOrder(true); // Cập nhật trạng thái có đơn hàng mới
           } else {
             setHasNewOrder(false);
@@ -165,6 +165,11 @@ const AppHeader = () => {
   // chuyển trang thông tin
   const handleAvatarClick = () => {
     navigate("/info");
+  };
+
+  // chuyển trang thông tin
+  const handleordersClick = () => {
+    navigate("/orders");
   };
 
   return (
@@ -251,72 +256,53 @@ const AppHeader = () => {
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
           </li>
-          <CDropdown variant="nav-item" placement="bottom-end">
-            <CDropdownToggle caret={false}>
-              <div style={{ position: "relative" }}>
-                <CIcon icon={cilBell} size="lg" />
-                {hasNewOrder && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "-5px",
-                      right: "-5px",
-                      backgroundColor: "red",
-                      borderRadius: "50%",
-                      width: "8px",
-                      height: "8px",
-                    }}
-                  />
-                )}
-              </div>
-            </CDropdownToggle>
-            <CDropdownMenu></CDropdownMenu>
-          </CDropdown>
+        </CHeaderNav>
 
+        <div style={{ position: "relative" }}>
+          <CIcon
+            icon={cilBell}
+            size="lg"
+            style={{ cursor: "pointer" }}
+            onClick={handleordersClick}
+          />
+          {hasNewOrder && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-5px",
+                right: "-5px",
+                backgroundColor: "red",
+                borderRadius: "50%",
+                width: "8px",
+                height: "8px",
+              }}
+            />
+          )}
+        </div>
+
+        <CHeaderNav>
           <li className="nav-item py-1">
             <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
           </li>
-          <CDropdown variant="nav-item" placement="bottom-end">
-            <CDropdownToggle caret={false}>
-              {colorMode === "dark" ? (
-                <CIcon icon={cilMoon} size="lg" />
-              ) : colorMode === "auto" ? (
-                <CIcon icon={cilContrast} size="lg" />
-              ) : (
-                <CIcon icon={cilSun} size="lg" />
-              )}
-            </CDropdownToggle>
-          </CDropdown>
+        </CHeaderNav>
 
-          <CDropdownMenu>
-            <CDropdownItem
-              active={colorMode === "light"}
-              className="d-flex align-items-center"
-              as="button"
-              type="button"
-              onClick={() => setColorMode("light")}
-            >
-              <CIcon className="me-2" icon={cilSun} size="lg" /> Light
-            </CDropdownItem>
-            <CDropdownItem
-              active={colorMode === "dark"}
-              className="d-flex align-items-center"
-              as="button"
-              type="button"
-              onClick={() => setColorMode("dark")}
-            >
-              <CIcon className="me-2" icon={cilMoon} size="lg" /> Dark
-            </CDropdownItem>
-            <CDropdownItem
-              active={colorMode === "auto"}
-              className="d-flex align-items-center"
-              as="button"
-              type="button"
-              onClick={() => setColorMode("auto")}
-            >
-              <CIcon className="me-2" icon={cilContrast} size="lg" /> Auto
-            </CDropdownItem>
-          </CDropdownMenu>
+        <CHeaderNav>
+          {/* <li className="nav-item py-1">
+            <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
+          </li> */}
+          <div
+            className="d-flex align-items-center"
+            style={{ cursor: "pointer" }}
+            onClick={() =>
+              setColorMode(colorMode === "light" ? "dark" : "light")
+            }
+          >
+            {colorMode === "dark" ? (
+              <CIcon icon={cilMoon} size="lg" />
+            ) : (
+              <CIcon icon={cilSun} size="lg" />
+            )}
+          </div>
         </CHeaderNav>
       </CContainer>
     </CHeader>
