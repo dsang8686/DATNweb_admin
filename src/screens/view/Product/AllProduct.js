@@ -9,6 +9,7 @@ import {
   CCardText,
   CRow,
   CSpinner,
+  CFormCheck,
 } from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -97,7 +98,7 @@ const AllProduct = () => {
       ); // Cập nhật danh sách sản phẩm sau khi chuyển trạng thái
       setVisible(false); // Đóng modal
       toast.success("Ẩn sản phẩm thành công");
-      fetchProducts()
+      fetchProducts();
     } catch (error) {
       toast.error("Lỗi khi ẩn");
       console.error("Lỗi khi chuyển trạng thái sản phẩm:", error);
@@ -172,12 +173,18 @@ const AllProduct = () => {
                     <CCardText className="truncate">
                       {product.description}
                     </CCardText>
-                    <div className="truncate">
-                      Giá: {product.price} 
-                    </div>
+                    <div className="truncate">Giá: {product.price}</div>
                     <div className="truncate my-2">
-                      Giá nhập: {product.defaultPrice} 
+                      Giá nhập: {product.defaultPrice}
                     </div>
+                    <CFormCheck
+                      type="checkbox"
+                      id="adminCheck"
+                      label="Nổi bật"
+                      checked={product.isFeatured}
+                      disabled
+                    />
+                    
                     <div className="d-flex justify-content-end">
                       <CButton
                         color="danger"

@@ -8,6 +8,7 @@ import {
   CCol,
   CSpinner,
   CFormLabel,
+  CFormCheck,
 } from "@coreui/react";
 import BackButton from "../../../Component/BackButton";
 import axios from "axios";
@@ -27,6 +28,7 @@ const EditProduct = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [price, setPrice] = useState("");
   const [defaultPrice, setDefaultPrice] = useState("");
+  const [isFeatured, setIsFeatured] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -61,6 +63,7 @@ const EditProduct = () => {
           setDescription(response.data.description);
           setPrice(response.data.price);
           setDefaultPrice(response.data.defaultPrice);
+          setIsFeatured(response.data.isFeatured);
           setSelectedCategory(response.data.category._id);
           setImagePreview(response.data.image);
         } else {
@@ -93,6 +96,7 @@ const EditProduct = () => {
     formData.append("category", selectedCategory);
     formData.append("price", price);
     formData.append("defaultPrice", defaultPrice);
+    formData.append("isFeatured", isFeatured);
     if (imageFile) formData.append("image", imageFile);
 
     try {
@@ -138,7 +142,7 @@ const EditProduct = () => {
       </CCol>
 
       <CForm onSubmit={handleSubmit}>
-      <CFormLabel htmlFor="restaurantName">Chọn danh mục</CFormLabel>
+        <CFormLabel htmlFor="restaurantName">Chọn danh mục</CFormLabel>
         <CCol className="mb-3">
           <CFormSelect
             aria-label="Chọn danh mục"
@@ -164,17 +168,17 @@ const EditProduct = () => {
           className="mb-3"
         />
         <div className="mb-3">
-        <CFormLabel htmlFor="restaurantName">Giá bán</CFormLabel>
-        <CFormInput
-          type="number"
-          placeholder="Giá"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          required
-        />
+          <CFormLabel htmlFor="restaurantName">Giá bán</CFormLabel>
+          <CFormInput
+            type="number"
+            placeholder="Giá"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+          />
         </div>
         <CFormLabel htmlFor="restaurantName">Giá nhập</CFormLabel>
-         <CFormInput
+        <CFormInput
           type="number"
           placeholder="Giá nhập"
           value={defaultPrice}
@@ -190,13 +194,21 @@ const EditProduct = () => {
           className="mb-4"
           required
         />
-        <CFormLabel htmlFor="restaurantName">Chọn ảnh</CFormLabel>
+        <CFormCheck
+          type="checkbox"
+          id="adminCheck"
+          label="Nổi bật"
+          checked={isFeatured}
+          onChange={(e) => setIsFeatured(e.target.checked)}
+          // required
+        />
+
+        <CFormLabel htmlFor="restaurantName" className="mt-3">Chọn ảnh</CFormLabel>
         <CFormInput
           type="file"
           accept="image/*"
           onChange={handleImageChange}
           className="mb-4"
-         
         />
         {imagePreview && (
           <div>

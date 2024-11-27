@@ -7,12 +7,16 @@ import {
   CFormInput,
   CImage,
   CRow,
+  CCard,
+  CCardBody,
+  CCardHeader,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import API_BASE_URL from "../../../API/config";
+
 function Info() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
@@ -23,23 +27,19 @@ function Info() {
   const [image, setImage] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const fetchAdminInformation = async () => {
     const token = localStorage.getItem("authToken");
     const userId = localStorage.getItem("userId");
 
     if (token && userId) {
-      setIsLoggedIn(true);
-
       try {
         const response = await axios.get(
-          `https://app-datn-gg.onrender.com/api/v1/users/${userId}`,
+          `${API_BASE_URL}/api/v1/users/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
         const data = response.data;
         setUserName(data.name);
         setEmail(data.email);
@@ -101,118 +101,110 @@ function Info() {
 
   return (
     <CContainer>
-      <CCol className="d-flex justify-content-between my-3">
-        <h4 className="mb-4">THÔNG TIN ADMIN</h4>
-        {/* <CButton color="primary" className="mb-3">
-          <Link
-            to={"/admin/list"}
-            style={{ color: "white", textDecoration: "none" }}
-          >
-            Thêm admin mới
-          </Link>
-        </CButton> */}
-      </CCol>
-
-      <CCol
-        md={12}
-        className="d-flex justify-content-between "
-        style={{ alignItems: "center" }}
-      >
-        <h6>Thông tin tài khoản</h6>
-        <button className="mb-3 border-0">
-          <Link style={{ color: "white", textDecoration: "none" }}>
-            <div onClick={handleEditToggle}>
-              {isEditing ? (
-                <div>
-                  <CButton
-                    color="danger"
-                    className="bi bi-x-square"
-                    style={{ fontSize: 20 }}
-                  />
-                  <CButton
-                    color="success"
-                    className="bi bi-check2-square ms-2"
-                    style={{ fontSize: 20 }}
-                    onClick={handleSave}
-                  />
-                </div>
-              ) : (
-                <CButton
-                  color="primary"
-                  className="bi bi-pencil-square"
-                  style={{ fontSize: 20 }}
+      <CCard className="mt-4">
+        <CCardHeader className="text-center">
+          <h4>Thông Tin Quản Trị Viên</h4>
+        </CCardHeader>
+        <CCardBody>
+          {/* Header Info */}
+          <CRow className="text-center mb-4">
+            <CCol md={4} className="mx-auto">
+              <CImage
+                src={previewImage || "https://via.placeholder.com/150"}
+                alt="Avatar"
+                width="150"
+                height="150"
+                roundedCircle
+              />
+            </CCol>
+          </CRow>
+          {/* Form */}
+          <CForm>
+            <CRow className="gy-3">
+              <CCol md={6}>
+                <CFormInput
+                  label="Tên Quản Trị Viên"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  disabled={!isEditing}
                 />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput label="Email" value={email} disabled />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  label="Số Điện Thoại"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  disabled={!isEditing}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  label="Giới Tính"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  disabled={!isEditing}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormCheck
+                  type="checkbox"
+                  id="adminCheck"
+                  label="Admin"
+                  checked={admin}
+                  onChange={(e) => setAdmin(e.target.checked)}
+                  disabled={!isEditing}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="file"
+                  label="Tải Lên Ảnh Đại Diện"
+                  onChange={handleImageChange}
+                  disabled={!isEditing}
+                />
+              </CCol>
+              {previewImage && (
+                <CCol md={12} className="text-center mt-3">
+                  <CImage
+                    src={previewImage}
+                    alt="Preview"
+                    width="100"
+                    height="100"
+                    rounded
+                  />
+                </CCol>
               )}
-            </div>
-          </Link>
-        </button>
-      </CCol>
+            </CRow>
 
-      <CRow>
-        <CCol md={12}>
-          <CForm className="row gy-3 mt-1">
-            {isLoggedIn ? (
-              <>
-                <CCol md={12}>
-                  <CFormInput
-                    label="Tên Admin"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </CCol>
-                <CCol md={12}>
-                  <CFormInput label="Email" value={email} disabled />
-                </CCol>
-                <CCol md={12}>
-                  <CFormInput
-                    label="Số điện thoại"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </CCol>
-                <CCol md={12}>
-                  <CFormInput
-                    label="Giới tính"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </CCol>
-                <CCol md={12}>
-                  <CFormCheck
-                    type="checkbox"
-                    id="adminCheck"
-                    label="Admin"
-                    checked={admin}
-                    onChange={(e) => setAdmin(e.target.checked)}
-                    disabled={!isEditing}
-                  />
-                </CCol>
-                <CCol md={12}>
-                  <CFormInput
-                    type="file"
-                    label="Ảnh đại diện"
-                    onChange={handleImageChange}
-                  />
-                  {previewImage && (
-                    <CImage
-                      src={previewImage}
-                      alt="Profile Preview"
-                      width="200"
-                      rounded
-                      className="mt-3"
-                    />
-                  )}
-                </CCol>
-              </>
-            ) : (
-              <h6>Bạn chưa đăng nhập. Vui lòng đăng nhập để xem thông tin.</h6>
-            )}
+            {/* Action Buttons */}
+            <CRow className="text-center mt-4">
+              <CCol>
+                {isEditing ? (
+                  <>
+                    <CButton color="danger" onClick={handleEditToggle}>
+                      Hủy
+                    </CButton>
+                    <CButton
+                      color="success"
+                      className="ms-3"
+                      onClick={handleSave}
+                    >
+                      Lưu
+                    </CButton>
+                  </>
+                ) : (
+                  <CButton color="primary" onClick={handleEditToggle}>
+                    Chỉnh Sửa
+                  </CButton>
+                )}
+              </CCol>
+            </CRow>
           </CForm>
-        </CCol>
-      </CRow>
+        </CCardBody>
+      </CCard>
     </CContainer>
   );
 }
