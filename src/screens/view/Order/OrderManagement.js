@@ -162,6 +162,15 @@ const OrderManagement = ({ onDeleteOrder }) => {
             Pending
           </CButton>
           <CButton
+            color="warning"
+            onClick={() => handleFilter("Coming")}
+            className="me-2 mb-2"
+            xs={12}
+            md="auto"
+          >
+            Coming
+          </CButton>
+          <CButton
             color="success"
             onClick={() => handleFilter("Success")}
             className="me-2 mb-2"

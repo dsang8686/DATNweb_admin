@@ -220,7 +220,7 @@ const ProductDetail = () => {
 
       // Reset trạng thái sau khi lưu thành công
       setAddingNew(false);
-      setNewSize("S");
+      setNewSize("");
       setNewPrice("");
       setNewdefaultPrice("");
       setNewImage(null);

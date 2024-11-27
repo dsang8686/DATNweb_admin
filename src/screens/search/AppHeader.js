@@ -93,35 +93,39 @@ const AppHeader = () => {
     };
   }, []);
 
+  // chưa làm
   // kiểm tra có đơn hàng mới hay không sau mỗi 30s
-  useEffect(() => {
-    const checkForNewOrders = async () => {
-      const token = localStorage.getItem("authToken");
-      if (token) {
-        try {
-          // Giả sử có một API kiểm tra đơn hàng mới
-          const response = await axios.get(
-            `${API_BASE_URL}/api/v1/orders/new`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          if (response.data.orderItems > 0) {
-            setHasNewOrder(true); // Cập nhật trạng thái có đơn hàng mới
-          } else {
-            setHasNewOrder(false);
-          }
-        } catch (error) {
-          console.error("Error checking for new orders:", error);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const checkForNewOrders = async () => {
+  //     const token = localStorage.getItem("authToken");
+  //     if (token) {
+  //       try {
+  //         // Giả sử có một API kiểm tra đơn hàng mới
+  //         const response = await axios.get(
+  //           `${API_BASE_URL}/api/v1/orders/new`,
+  //           {
+  //             headers: { Authorization: `Bearer ${token}` },
+  //           }
+  //         );
+  //         if (response.data.orderItems > 0) {
+  //           setHasNewOrder(true); // Cập nhật trạng thái có đơn hàng mới
+  //         } else {
+  //           setHasNewOrder(false);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error checking for new orders:", error);
+  //       }
+  //     }
+  //   };
 
-    checkForNewOrders();
-    // Kiểm tra đơn hàng mới mỗi 10 giây
-    const interval = setInterval(checkForNewOrders, 10000);
-    return () => clearInterval(interval); // Dọn dẹp khi component unmount
-  }, []);
+  //   checkForNewOrders();
+  //   // Kiểm tra đơn hàng mới mỗi 10 giây
+  //   const interval = setInterval(checkForNewOrders, 10000);
+  //   return () => clearInterval(interval); // Dọn dẹp khi component unmount
+  // }, []);
+
+
+
 
   // thanh search
   const handleSearch = async () => {
@@ -260,6 +264,7 @@ const AppHeader = () => {
 
         <div style={{ position: "relative" }}>
           <CIcon
+          className="mt-1 mx-2"
             icon={cilBell}
             size="lg"
             style={{ cursor: "pointer" }}

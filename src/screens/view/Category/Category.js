@@ -16,7 +16,7 @@ import API_BASE_URL from "../../../API/config";
 import axios from "axios";
 import ActiveModal from "../../../Component/ActiveModal";
 import ActiveModalCategory from "../../../Component/ActiveModalCategory";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const Category = () => {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Category = () => {
     setSelectedCategoryId(id);
     setVisible(true);
   };
-  // ẩn 
+  // ẩn
   const handleConfirmDelete = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -58,7 +58,7 @@ const Category = () => {
       navigate("/login");
       return;
     }
-  
+
     if (selectedCategoryId) {
       try {
         const response = await axios.put(
@@ -70,7 +70,7 @@ const Category = () => {
             },
           }
         );
-        console.log(response); 
+        console.log(response);
         if (response.data.success === false) {
           console.log(response.data.message); // Hiển thị thông báo lỗi nếu không thành công
           toast.error("Lỗi khi ẩn");
@@ -80,13 +80,15 @@ const Category = () => {
         }
       } catch (error) {
         toast.error("Lỗi khi ẩn");
-        console.error("Có lỗi xảy ra khi cập nhật trạng thái danh mục.", error.response ? error.response.data : error);
+        console.error(
+          "Có lỗi xảy ra khi cập nhật trạng thái danh mục.",
+          error.response ? error.response.data : error
+        );
       } finally {
         setVisible(false); // Đóng modal
       }
     }
   };
-  
 
   if (loading) {
     return (
@@ -105,26 +107,32 @@ const Category = () => {
 
   return (
     <div className="container">
-      <CCol className="d-flex justify-content-between my-3">
-        <h4 className="mb-4">DANH SÁCH DANH MỤC</h4>
+      {/* Header */}
+      <CCol className="d-flex justify-content-between align-items-center my-3">
+        <h4 className="text-uppercase">Danh Sách Danh Mục</h4>
         <CButton color="primary" className="mb-3">
           <Link
             to="/category/add"
             style={{ color: "white", textDecoration: "none" }}
           >
-            Thêm danh mục
+            + Thêm Danh Mục
           </Link>
         </CButton>
       </CCol>
 
+      {/* Category List */}
       <CRow>
         {categories.map((category) => (
           <CCol xs={12} sm={6} md={4} lg={3} key={category.id} className="mb-4">
-            <CCard>
-              <Link to="" style={{ textDecoration: "none", color: "inherit" }}>
+            <CCard className="shadow-sm border-0 h-100">
+              <Link
+                to=""
+                style={{ textDecoration: "none", color: "inherit" }}
+                className="hover-scale"
+              >
                 <div className="image-container">
                   <CCardImage
-                    className="custom-image"
+                    className="custom-image rounded-top"
                     orientation="top"
                     src={category.image}
                     alt={category.name}
@@ -132,19 +140,21 @@ const Category = () => {
                 </div>
               </Link>
 
-              <CCardBody>
-                <CCardTitle>{category.name}</CCardTitle>
-                <div className="d-flex justify-content-end">
+              <CCardBody className="d-flex flex-column">
+                <CCardTitle className="fw-bold text-truncate">
+                  {category.name}
+                </CCardTitle>
+                <div className="d-flex justify-content-end mt-auto">
                   <CButton
                     color="danger"
-                    className="mx-2"
+                    className="mx-1"
                     onClick={() => handleDeleteClick(category._id)}
                   >
                     <i className="bi bi-eye-slash"></i>
                   </CButton>
                   <CButton
                     color="primary"
-                    className="mx-2"
+                    className="mx-1"
                     onClick={() => navigate(`/category/edit/${category._id}`)}
                   >
                     <i className="bi bi-pencil-square"></i>
@@ -156,6 +166,7 @@ const Category = () => {
         ))}
       </CRow>
 
+      {/* Modal */}
       <ActiveModalCategory
         visible={visible}
         onClose={() => setVisible(false)}
