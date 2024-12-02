@@ -42,6 +42,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
           restaurantaddress: order.restaurant?.address,
           user: order.user?.name,
           dateOrdered: order.dateOrdered,
+          paymentMethob: order?.paymentMethob,
         }))
         .filter(
           (order) =>
@@ -199,6 +200,15 @@ const OrderManagement = ({ onDeleteOrder }) => {
                 <h5>Đơn hàng</h5>
                 <p>Địa chỉ giao hàng: {order.shippingAddress}</p>
                 <p>
+                  Thanh toán bằng:{" "}
+                  <strong>
+                    {" "}
+                    {order.paymentMethob === "Cash"
+                      ? "Tiền mặt"
+                      : "Chuyển khoản"}
+                  </strong>
+                </p>
+                <p>
                   Trạng thái:{" "}
                   {editingOrderId === order.orderId ? (
                     <select
@@ -236,7 +246,8 @@ const OrderManagement = ({ onDeleteOrder }) => {
                       <i className="bi bi-x-square" />
                     </CButton>
                   ) : (
-                    (order.status === "Pending" || order.status === "Coming") && (
+                    (order.status === "Pending" ||
+                      order.status === "Coming") && (
                       <CButton
                         color="primary"
                         className="mx-2"
@@ -278,18 +289,47 @@ const OrderManagement = ({ onDeleteOrder }) => {
       </CRow>
 
       <CPagination align="center" className="mt-3 custom-pagination">
-        {Array.from(
-          { length: Math.ceil(orders.length / ordersPerPage) },
-          (_, i) => (
-            <CPaginationItem
-              key={i}
-              active={i + 1 === currentPage}
-              onClick={() => handlePageChange(i + 1)}
-            >
-              {i + 1}
-            </CPaginationItem>
+        {/* Nút Previous */}
+        <CPaginationItem
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Trước
+        </CPaginationItem>
+
+        {/* Hiển thị số trang xung quanh trang hiện tại */}
+        {Array.from({ length: Math.ceil(orders.length / ordersPerPage) })
+          .map((_, i) => i + 1)
+          .filter(
+            (page) =>
+              page === currentPage || // Trang hiện tại
+              page === currentPage - 1 || // Trang trước
+              page === currentPage + 1 || // Trang sau
+              page === 1 || // Trang đầu tiên
+              page === Math.ceil(orders.length / ordersPerPage) // Trang cuối
           )
-        )}
+          .map((page, index, arr) => (
+            <React.Fragment key={page}>
+              {index > 0 &&
+                arr[index - 1] !== page - 1 && ( // Hiển thị dấu "..." nếu khoảng cách lớn hơn 1
+                  <CPaginationItem disabled>...</CPaginationItem>
+                )}
+              <CPaginationItem
+                active={page === currentPage}
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </CPaginationItem>
+            </React.Fragment>
+          ))}
+
+        {/* Nút Next */}
+        <CPaginationItem
+          disabled={currentPage === Math.ceil(orders.length / ordersPerPage)}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Sau
+        </CPaginationItem>
       </CPagination>
     </div>
   );
