@@ -14,6 +14,7 @@ import API_BASE_URL from "../../../API/config";
 const OrderDetail = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
+  const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
@@ -42,6 +43,31 @@ const OrderDetail = () => {
 
     fetchOrderDetail();
   }, [orderId]);
+
+  useEffect(() => {
+    if (order && order.transactionId) {
+      const fetchPayment = async () => {
+        try {
+          if (order.transactionId === "undefined") return;
+          const response = await axios.get(
+            `${API_BASE_URL}/api/v1/payment/payment-info/${order.transactionId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setPayment(response.data);
+          setLoading(false);
+        } catch (err) {
+          console.error("Lỗi", err);
+          setLoading(false);
+        }
+      };
+
+      fetchPayment();
+    }
+  }, [order]);
 
   useEffect(() => {
     if (order && order.restaurant) {
@@ -101,6 +127,28 @@ const OrderDetail = () => {
             {order.status}
           </span>
         </p>
+
+        <p>
+          Thanh toán bằng:{" "}
+          <strong>
+            <span>
+              {order.paymentMethob === "Cash" ? "Tiền mặt" : "Chuyển khoản"}
+            </span>
+            <span>
+              {order.paymentMethob !== "Cash" && (
+                <span
+                  className={`ms-4 ${
+                    payment?.status === "PAID" ? "text-success" : "text-danger"
+                  }`}
+                >
+                  {payment?.status === "PAID"
+                    ? "Đã thanh toán"
+                    : "Chưa thanh toán"}
+                </span>
+              )}
+            </span>
+          </strong>
+        </p>
         <p>
           <p>
             Tổng tiền:{" "}
@@ -143,7 +191,7 @@ const OrderDetail = () => {
               {/* <p>- Nước: {item.drink}</p> */}
               <p>- Sản phẩm: {item.product.name}</p>
               <p>- giá: {item.product.price}</p>
-              
+
               <p>- Gọi thêm:</p>
               <ul>
                 {item.attribute.map((attr, index) => (
