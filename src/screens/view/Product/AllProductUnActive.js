@@ -133,9 +133,9 @@ const AllProductUnActive = () => {
                 <CCardText className="truncate">
                   {product.description}
                 </CCardText>
-                <CCardText className="truncate">
+                {/* <CCardText className="truncate">
                   {product.category}
-                </CCardText>
+                </CCardText> */}
                 <div className="d-flex justify-content-end">
                   <CButton
                     color="info"

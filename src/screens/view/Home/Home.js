@@ -11,6 +11,7 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
+  CWidgetStatsA,
 } from "@coreui/react";
 
 const ITEMS_PER_PAGE = 7; // Số ngày hiển thị trên mỗi trang
@@ -20,6 +21,13 @@ const Home = () => {
   const [filterType, setFilterType] = useState("day");
   const [allData, setAllData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [stats, setStats] = useState({
+    totalSales: 0,
+    totalCosts: 0,
+    profit: 0,
+    totalOrders: 0,
+  });
 
   const formatLabel = (id) => {
     if (typeof id === "string") {
@@ -49,8 +57,18 @@ const Home = () => {
         }
       );
 
-      setAllData(response.data); // Lưu toàn bộ dữ liệu
-      updateChartData(response.data, 1); // Hiển thị trang đầu tiên
+      const data = response.data;
+
+      setAllData(data); // Lưu toàn bộ dữ liệu
+      updateChartData(data, 1); // Hiển thị trang đầu tiên
+
+      // Tính toán số liệu tổng quan
+      const totalSales = data.reduce((acc, item) => acc + item.totalSales, 0);
+      const totalCosts = data.reduce((acc, item) => acc + item.totalCost, 0);
+      const profit = data.reduce((acc, item) => acc + item.profit, 0);
+      const totalOrders = data.length;
+
+      setStats({ totalSales, totalCosts, profit, totalOrders });
     } catch (error) {
       console.error("Error fetching sales data:", error);
     }
@@ -116,6 +134,43 @@ const Home = () => {
 
   return (
     <div className="container mb-4">
+      {/* Thống kê tổng quan */}
+      <CRow className="mt-3 mb-4">
+        <CCol sm={6} lg={4}>
+          <CWidgetStatsA
+            className="mb-4"
+            color="primary"
+            value={`${stats.totalSales.toLocaleString()} VND`}
+            title="Tổng doanh số"
+          />
+        </CCol>
+        <CCol sm={6} lg={4}>
+          <CWidgetStatsA
+            className="mb-4"
+            color="danger"
+            value={`${stats.totalCosts.toLocaleString()} VND`}
+            title="Tổng chi phí"
+          />
+        </CCol>
+        <CCol sm={6} lg={4}>
+          <CWidgetStatsA
+            className="mb-4"
+            color="success"
+            value={`${stats.profit.toLocaleString()} VND`}
+            title="Lợi nhuận"
+          />
+        </CCol>
+        {/* <CCol sm={6} lg={3}>
+          <CWidgetStatsA
+            className="mb-4"
+            color="warning"
+            value={`${stats.totalOrders} đơn`}
+            title="Tổng số đơn hàng"
+          />
+        </CCol> */}
+      </CRow>
+
+      {/* Bộ lọc */}
       <CRow className="mt-3">
         <CCol xs={12} md={6}>
           <h4 className="mb-4">QUẢN LÝ DOANH THU</h4>
@@ -149,6 +204,7 @@ const Home = () => {
         </CCol>
       </CRow>
 
+      {/* Biểu đồ doanh thu */}
       <CCard className="mb-4">
         <CCardHeader className="bg-primary text-white text-center">
           <h5>Biểu đồ doanh thu</h5>

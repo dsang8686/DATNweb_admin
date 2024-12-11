@@ -7,6 +7,7 @@ import {
   CCard,
   CPagination,
   CPaginationItem,
+  CFormSelect,
 } from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +19,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 12; // Hiển thị 12 đơn hàng mỗi trang
+  const [filterType, setFilterType] = useState("");
 
   const [editingOrderId, setEditingOrderId] = useState(null);
   const [newStatus, setNewStatus] = useState("");
@@ -64,10 +66,20 @@ const OrderManagement = ({ onDeleteOrder }) => {
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    fetchOrders(); // Gọi API lần đầu khi component mount
+  
+    // Thiết lập khoảng thời gian để gọi lại API
+    const interval = setInterval(() => {
+      fetchOrders(filterType); // Gọi lại API với bộ lọc hiện tại
+    }, 10000);
+  
+    // Dọn dẹp interval khi component bị unmount
+    return () => clearInterval(interval);
+  }, [filterType]); // Theo dõi sự thay đổi của `filterType`
+  
 
   const handleFilter = (status) => {
+    setFilterType(status); // Lưu trạng thái bộ lọc
     fetchOrders(status);
     setLoading(true);
   };
@@ -135,60 +147,30 @@ const OrderManagement = ({ onDeleteOrder }) => {
 
   return (
     <div className="container">
-      <CRow className="my-3">
-        <CCol xs={12} md={5}>
+      <CRow className="my-3 align-items-center">
+        <CCol xs={12} md={7}>
           <h4 className="mb-4">TẤT CẢ ĐƠN HÀNG</h4>
         </CCol>
+
         <CCol
           xs={12}
-          md={7}
-          className="mb-4 d-flex flex-wrap justify-content-end"
+          md={5}
+          className="mb-4 d-flex flex-wrap justify-content-end align-items-center"
         >
-          <CButton
-            color="dark"
-            onClick={() => handleFilter("")}
-            className="me-2 mb-2"
-            xs={12}
-            md="auto"
-          >
-            Tất cả
-          </CButton>
-          <CButton
-            color="primary"
-            onClick={() => handleFilter("Pending")}
-            className="me-2 mb-2"
-            xs={12}
-            md="auto"
-          >
-            Pending
-          </CButton>
-          <CButton
-            color="warning"
-            onClick={() => handleFilter("Coming")}
-            className="me-2 mb-2"
-            xs={12}
-            md="auto"
-          >
-            Coming
-          </CButton>
-          <CButton
-            color="success"
-            onClick={() => handleFilter("Success")}
-            className="me-2 mb-2"
-            xs={12}
-            md="auto"
-          >
-            Success
-          </CButton>
-          <CButton
-            color="danger"
-            onClick={() => handleFilter("Failed")}
-            className="mb-2"
-            xs={12}
-            md="auto"
-          >
-            Failed
-          </CButton>
+          <strong>Trạng thái:</strong>
+          <span className="ms-2" style={{width:'50%'}}>
+            <CFormSelect
+              value={filterType} // Giá trị hiện tại của filter
+              onChange={(e) => handleFilter(e.target.value)} // Gọi hàm filter với giá trị đã chọn
+              
+            >
+              <option value="">Tất cả</option>
+              <option value="Pending">Pending</option>
+              <option value="Coming">Coming</option>
+              <option value="Success">Success</option>
+              <option value="Failed">Failed</option>
+            </CFormSelect>
+          </span>
         </CCol>
       </CRow>
 

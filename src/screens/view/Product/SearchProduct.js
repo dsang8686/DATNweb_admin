@@ -47,44 +47,6 @@ const SearchProduct = () => {
     }
   };
 
-  const [products, setProducts] = useState([]);
-  const [visible, setVisible] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState(null);
-
-
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/v1/products/get/un_active`
-      );
-
-      // Lọc sản phẩm có `category` khác `null`
-      const filteredProducts = response.data.filter(
-        (product) => product.category
-      );
-
-      setProducts(filteredProducts);
-      setLoading(false);
-    } catch (error) {
-      console.error("Lỗi khi tải sản phẩm:", error);
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const handleViewDetail = (productId) => {
-    navigate(`/product-detail/${productId}`);
-  };
-
-
-  //xóa sản phẩm
-  const handleDeleteClick = (id) => {
-    setSelectedProductId(id);
-    setVisible(true);
-  };
-
   const token = localStorage.getItem("authToken");
   if (!token) {
     //toast.error("Bạn cần đăng nhập để thêm danh mục!");
@@ -92,61 +54,8 @@ const SearchProduct = () => {
     return;
   }
 
-  const handleDeleteConfirm = async () => {
-    try {
-      await axios.delete(
-        `${API_BASE_URL}/api/v1/products/${selectedProductId}`,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setProducts(
-        products.filter((product) => product._id !== selectedProductId)
-      );
-      setVisible(false);
-      fetchProducts();
-    } catch (error) {
-      console.error("Lỗi khi xóa sản phẩm:", error);
-      setVisible(false);
-    }
-  };
-
-  //bỏ ẩn sản phẩm
-
-  const handleActieve = (id) => {
-    setSelectedProductId(id);
-    setVisible(true);
-  };
-  const handleActieveConfirm = async () => {
-    try {
-      await axios.put(
-        `${API_BASE_URL}/api/v1/products/${selectedProductId}`,
-        { isActive: true },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setProducts(
-        products.map((product) =>
-          product._id === selectedProductId
-            ? { ...product, isActive: false }
-            : product
-        )
-      );
-      setVisible(false);
-      fetchProducts();
-    } catch (error) {
-      console.error("Lỗi khi chuyển trạng thái sản phẩm:", error);
-      setVisible(false);
-    }
+  const handleViewDetail = (productId) => {
+    navigate(`/product-detail/${productId}`);
   };
 
   const handleEditClick = (productId) => {
@@ -204,7 +113,7 @@ const SearchProduct = () => {
                   <CCardText>{product.description}</CCardText>
                   <CCardText>Danh mục: {product.category?.name}</CCardText>
                       <div className="d-flex justify-content-end">
-                      <CButton
+                      {/* <CButton
                         color="danger"
                         className="mx-2"
                         onClick={() => handleDeleteClick(product._id)}
@@ -213,7 +122,7 @@ const SearchProduct = () => {
                           style={{ color: "white" }}
                           className="bi bi-eye-slash"
                         ></i>
-                      </CButton>
+                      </CButton> */}
                       <CButton
                         color="primary"
                         className="mx-2"

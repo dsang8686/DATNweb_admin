@@ -127,7 +127,7 @@ const MemberPage = () => {
 
   return (
     <CContainer>
-      <h3 className="my-4">Danh sách thành viên là quản trị viên</h3>
+      <h4 className="my-4">DANH SÁCH QUẢN TRỊ VIÊN</h4>
       <CRow>
         {members.map((member) => (
           <CCol key={member._id} xs={12} sm={6} md={4} lg={3} className="mb-4">
