@@ -70,16 +70,16 @@ const Category = () => {
             },
           }
         );
-        console.log(response);
+        //console.log(response);
         if (response.data.success === false) {
-          console.log(response.data.message); // Hiển thị thông báo lỗi nếu không thành công
+          //console.log(response.data.message); // Hiển thị thông báo lỗi nếu không thành công
           toast.error("Lỗi khi ẩn");
         } else {
           toast.success("Ẩn danh mục thành công");
           await fetchCategories(); // Nếu cập nhật thành công, tải lại danh mục
         }
       } catch (error) {
-        toast.error("Lỗi khi ẩn");
+        toast.error("Không thể ẩn danh mục khi đang có sản phẩm");
         console.error(
           "Có lỗi xảy ra khi cập nhật trạng thái danh mục.",
           error.response ? error.response.data : error
