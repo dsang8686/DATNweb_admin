@@ -71,7 +71,7 @@ const OrderManagement = ({ onDeleteOrder }) => {
     // Thiết lập khoảng thời gian để gọi lại API
     const interval = setInterval(() => {
       fetchOrders(filterType); // Gọi lại API với bộ lọc hiện tại
-    }, 10000);
+    }, 3000);
   
     // Dọn dẹp interval khi component bị unmount
     return () => clearInterval(interval);

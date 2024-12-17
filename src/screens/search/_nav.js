@@ -155,11 +155,11 @@ const _nav = [
         name: "Thành viên admin",
         to: "/member",
       },
-      {
-        component: CNavItem,
-        name: "Thêm admin",
-        to: "/addinfo",
-      },
+      // {
+      //   component: CNavItem,
+      //   name: "Thêm admin",
+      //   to: "/addinfo",
+      // },
       {
         component: CNavItem,
         name: "User",

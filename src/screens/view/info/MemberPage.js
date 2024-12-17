@@ -8,9 +8,8 @@ import {
   CCardBody,
   CCardImage,
   CCardTitle,
-  CButton,
-  CFormCheck,
   CSpinner,
+  CFormCheck,
 } from "@coreui/react";
 import API_BASE_URL from "../../../API/config";
 
@@ -18,8 +17,6 @@ const MemberPage = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -46,77 +43,15 @@ const MemberPage = () => {
     fetchMembers();
   }, []);
 
-  const handleEditClick = (member) => {
-    setEditMode(true);
-    setSelectedMember({ ...member });
-  };
-
-  const handleCancelEdit = () => {
-    setEditMode(false);
-    setSelectedMember(null);
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-
-    // Cập nhật selectedMember với giá trị mới của checkbox
-    setSelectedMember((prev) => ({
-      ...prev,
-      [name]: checked, // cập nhật với giá trị của checkbox
-    }));
-  };
-
-  const handleSaveChanges = async () => {
-
-    try {
-      const token = localStorage.getItem("authToken");
-      const response = await axios.put(
-        `${API_BASE_URL}/api/v1/users/${selectedMember._id}`,
-        {
-          isAdmin: selectedMember.isAdmin,
-          isVerified: selectedMember.isVerified,
-          isActive: selectedMember.isActive,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      // Kiểm tra xem response có dữ liệu không trước khi ghi nhận
-      if (response && response.data) {
-        console.log("Phản hồi từ API:", response.data); // Kiểm tra phản hồi
-      } else {
-        console.log("Không có dữ liệu phản hồi từ API.");
-      }
-
-      setEditMode(false);
-      setSelectedMember(null);
-      // Refresh members after save
-      const membersResponse = await axios.get(`${API_BASE_URL}/api/v1/users/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const adminMembers = membersResponse.data.filter(
-        (user) => user.isAdmin === true
-      );
-      setMembers(adminMembers);
-    } catch (error) {
-      console.error("Lỗi khi cập nhật người dùng:", error);
-      setError("Không thể cập nhật thông tin người dùng");
-    }
-  };
-
   if (loading) {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
         style={{ height: "200px" }}
       >
-        <span> <CSpinner /></span>
+        <span>
+          <CSpinner />
+        </span>
       </div>
     );
   }
@@ -147,62 +82,21 @@ const MemberPage = () => {
                 <CFormCheck
                   label="Admin"
                   name="isAdmin"
-                  checked={
-                    selectedMember?._id === member._id
-                      ? selectedMember.isAdmin
-                      : member.isAdmin
-                  }
-                  disabled={!editMode || selectedMember?._id !== member._id}
-                  onChange={handleCheckboxChange}
+                  checked={member.isAdmin}
+                  disabled
                 />
                 <CFormCheck
-                  label="xác thực"
+                  label="Xác thực"
                   name="isVerified"
-                  checked={
-                    selectedMember?._id === member._id
-                      ? selectedMember.isVerified
-                      : member.isVerified
-                  }
-                  disabled={!editMode || selectedMember?._id !== member._id}
-                  onChange={handleCheckboxChange}
+                  checked={member.isVerified}
+                  disabled
                 />
                 <CFormCheck
                   label="Hoạt động"
                   name="isActive"
-                  checked={
-                    selectedMember?._id === member._id
-                      ? selectedMember.isActive
-                      : member.isActive
-                  }
-                  disabled={!editMode || selectedMember?._id !== member._id}
-                  onChange={handleCheckboxChange}
+                  checked={member.isActive}
+                  disabled
                 />
-                {!editMode || selectedMember?._id !== member._id ? (
-                  <div className="text-end">
-                    <CButton
-                      color="primary"
-                      onClick={() => handleEditClick(member)}
-                    >
-                      <i
-                        style={{ color: "white" }}
-                        className="bi bi-pencil-square"
-                      ></i>
-                    </CButton>
-                  </div>
-                ) : (
-                  <div className="text-end">
-                    <CButton color="success" onClick={handleSaveChanges}>
-                      <i class="bi bi-check2-square"></i>
-                    </CButton>
-                    <CButton
-                      color="danger"
-                      onClick={handleCancelEdit}
-                      className="ms-2"
-                    >
-                      <i className="bi bi-x-square" />
-                    </CButton>
-                  </div>
-                )}
               </CCardBody>
             </CCard>
           </CCol>
